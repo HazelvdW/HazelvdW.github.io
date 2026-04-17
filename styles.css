@@ -90,7 +90,6 @@ h6,
   font-family: var(--heading-font);
   font-weight: 500;
   color: var(--white-color);
-  text-transform: capitalize;
 }
 
 a {
