@@ -23,37 +23,47 @@
 
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Logo: big, overlapping nav, no layout push */
-        #header-nav { position: relative; overflow: visible; min-height: 3rem; }
-        .navbar-brand-logo {
-            position: absolute; top: 50%; left: 1.2rem;
-            transform: translateY(-50%); z-index: 20; pointer-events: auto;
+        /* ── Logo bar: separate row above nav ── */
+        #logo-bar {
+            padding: 0.6rem 1.5rem 0;
+            line-height: 0;
         }
-        /* Tighten nav-to-body gap */
+        #logo-bar img { height: 5rem; width: auto; }
+
+        /* ── Collapse nav top margin ── */
+        #header-nav { margin-top: -0.3rem; padding-top: 0.4rem !important; padding-bottom: 0.4rem !important; }
+
+        /* ── Tighten section top ── */
         section.padding-medium { padding-top: 0.5rem !important; }
-        /* Fix ALL button text to dark purple so it's readable on neon/grey */
-        .btn { color: #1a0033 !important; }
-        .btn:hover { color: #1a0033 !important; }
-        /* Background layer sits behind everything */
-        .bg-scatter { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-        .container, nav, section, footer { position: relative; z-index: 1; }
+
+        /* ── Badge labels (Favourite, Preprint, etc.) readable ── */
+        .badge { color: #1a0033 !important; }
+
+        /* ── Outline/solid BUTTONS keep their own colours; only override text ── */
+        /* We DON'T touch .btn generically — only the small label badges */
     </style>
 </head>
 
-<body>
-    <!-- bg scatter -->
-    <div style="position:fixed;top:2%;left:1%;width:22%;opacity:0.13;transform:rotate(-5deg);z-index:0;pointer-events:none;border-radius:16px;overflow:hidden;"><img src="images/img44.png" alt="" style="width:100%;display:block;"></div>
-    <div style="position:fixed;top:5%;right:1%;width:20%;opacity:0.13;transform:rotate(4deg);z-index:0;pointer-events:none;border-radius:16px;overflow:hidden;"><img src="images/img9.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:fixed;top:18%;left:8%;width:18%;opacity:0.13;transform:rotate(6deg);z-index:0;pointer-events:none;border-radius:16px;overflow:hidden;"><img src="images/img2.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:fixed;top:20%;right:5%;width:22%;opacity:0.13;transform:rotate(-3deg);z-index:0;pointer-events:none;border-radius:16px;overflow:hidden;"><img src="images/img20.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:fixed;top:35%;left:0%;width:20%;opacity:0.13;transform:rotate(3deg);z-index:0;pointer-events:none;border-radius:16px;overflow:hidden;"><img src="images/img18.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:fixed;top:38%;right:2%;width:19%;opacity:0.13;transform:rotate(-6deg);z-index:0;pointer-events:none;border-radius:16px;overflow:hidden;"><img src="images/img17.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:fixed;top:50%;left:6%;width:21%;opacity:0.13;transform:rotate(5deg);z-index:0;pointer-events:none;border-radius:16px;overflow:hidden;"><img src="images/img10.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:fixed;top:52%;right:0%;width:20%;opacity:0.13;transform:rotate(2deg);z-index:0;pointer-events:none;border-radius:16px;overflow:hidden;"><img src="images/img8.png" alt="" style="width:100%;display:block;"></div>
-    <div style="position:fixed;top:65%;left:1%;width:19%;opacity:0.13;transform:rotate(-4deg);z-index:0;pointer-events:none;border-radius:16px;overflow:hidden;"><img src="images/img37.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:fixed;top:68%;right:4%;width:22%;opacity:0.13;transform:rotate(6deg);z-index:0;pointer-events:none;border-radius:16px;overflow:hidden;"><img src="images/img7.png" alt="" style="width:100%;display:block;"></div>
-    <div style="position:fixed;top:80%;left:5%;width:20%;opacity:0.13;transform:rotate(-3deg);z-index:0;pointer-events:none;border-radius:16px;overflow:hidden;"><img src="images/img30.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:fixed;top:83%;right:1%;width:18%;opacity:0.13;transform:rotate(4deg);z-index:0;pointer-events:none;border-radius:16px;overflow:hidden;"><img src="images/img3.jpg" alt="" style="width:100%;display:block;"></div>
+<body style="position:relative;">
+    <!-- Scrollable collage background -->
+    <div style="position:absolute;top:0;left:0;width:100%;min-height:100%;z-index:0;pointer-events:none;overflow:hidden;">
+    <div style="position:absolute;top:3%;left:2%;width:14%;opacity:0.15;transform:rotate(-5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img44.png" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:3%;left:72%;width:13%;opacity:0.15;transform:rotate(4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img9.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:15%;left:18%;width:16%;opacity:0.15;transform:rotate(6deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img2.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:15%;left:58%;width:15%;opacity:0.15;transform:rotate(-3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img20.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:28%;left:5%;width:13%;opacity:0.15;transform:rotate(3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img18.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:28%;left:80%;width:14%;opacity:0.15;transform:rotate(-6deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img17.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:40%;left:30%;width:15%;opacity:0.15;transform:rotate(5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img10.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:40%;left:62%;width:13%;opacity:0.15;transform:rotate(2deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img8.png" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:53%;left:8%;width:14%;opacity:0.15;transform:rotate(-4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img37.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:53%;left:75%;width:16%;opacity:0.15;transform:rotate(6deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img7.png" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:65%;left:22%;width:13%;opacity:0.15;transform:rotate(4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img30.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:65%;left:55%;width:15%;opacity:0.15;transform:rotate(-3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img3.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:78%;left:3%;width:15%;opacity:0.15;transform:rotate(5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img46.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:78%;left:68%;width:14%;opacity:0.15;transform:rotate(-5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img39.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:90%;left:15%;width:13%;opacity:0.15;transform:rotate(3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img41.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:90%;left:50%;width:16%;opacity:0.15;transform:rotate(4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img47.jpg" alt="" style="width:100%;display:block;"></div>
+    </div>
 
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
         <symbol id="arrow-right" viewBox="0 0 24 24">
@@ -84,13 +94,14 @@
 
     <div class="preloader text-white fs-6 text-uppercase overflow-hidden"></div>
 
-    <nav id="header-nav" class="navbar navbar-expand-lg py-4" data-bs-theme="dark">
-        <div class="container-fluid padding-side">
-            <a class="navbar-brand navbar-brand-logo" href="index.html">
-                <img src="images/logo.png" alt="HAVDW" style="height:5.5rem;width:auto;">
-            </a>
+    <!-- Logo sits in its own bar, separate from nav -->
+    <div id="logo-bar">
+        <a href="index.html"><img src="images/logo.png" alt="HAVDW"></a>
+    </div>
 
-            <button class="navbar-toggler shadow-none" type="button" data-bs-toggle="offcanvas"
+    <nav id="header-nav" class="navbar navbar-expand-lg py-2" data-bs-theme="dark">
+        <div class="container-fluid padding-side">
+            <button class="navbar-toggler shadow-none ms-auto" type="button" data-bs-toggle="offcanvas"
                 data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -107,43 +118,27 @@
                             <a class="nav-link active pe-lg-5" aria-current="page" href="index.html">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link pe-lg-5" href="repositories.html">Repositories</a>
+                            <a class="nav-link  pe-lg-5" href="repositories.html">Repositories</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link pe-lg-5" href="research.html">Research</a>
+                            <a class="nav-link  pe-lg-5" href="research.html">Research</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link pe-lg-5" href="cv.html">CV</a>
+                            <a class="nav-link  pe-lg-5" href="cv.html">CV</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link fw-bold border-bottom border-2 border-primary"
                                 href="mailto:hazel.a.van-der-walle@durham.ac.uk">Get in touch</a>
                         </li>
                     </ul>
-
                     <!-- Mobile socials -->
                     <ul class="d-flex d-lg-none list-unstyled justify-content-center mt-4">
-                        <li>
-                            <a class="nav-link mx-2" href="https://github.com/HazelvdW" target="_blank">
-                                <svg class="social-icon" width="24" height="24">
-                                    <use xlink:href="#github"></use>
-                                </svg>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="nav-link mx-2" href="https://orcid.org/0009-0003-1029-9683" target="_blank">
-                                <svg class="social-icon" width="24" height="24">
-                                    <use xlink:href="#orcid"></use>
-                                </svg>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="nav-link mx-2" href="mailto:hazel.a.van-der-walle@durham.ac.uk">
-                                <svg class="social-icon" width="24" height="24">
-                                    <use xlink:href="#email"></use>
-                                </svg>
-                            </a>
-                        </li>
+                        <li><a class="nav-link mx-2" href="https://github.com/HazelvdW" target="_blank">
+                                <svg class="social-icon" width="24" height="24"><use xlink:href="#github"></use></svg></a></li>
+                        <li><a class="nav-link mx-2" href="https://orcid.org/0009-0003-1029-9683" target="_blank">
+                                <svg class="social-icon" width="24" height="24"><use xlink:href="#orcid"></use></svg></a></li>
+                        <li><a class="nav-link mx-2" href="mailto:hazel.a.van-der-walle@durham.ac.uk">
+                                <svg class="social-icon" width="24" height="24"><use xlink:href="#email"></use></svg></a></li>
                     </ul>
                 </div>
             </div>
@@ -154,25 +149,24 @@
         <div class="container text-white">
             <div class="row flex-row-reverse justify-content-center align-items-center">
 
-                <!-- Right: portrait + floating image mosaic -->
-                <div class="col-lg-6 text-center" data-aos="fade-up" data-aos-duration="1400">
+                                <div class="col-lg-6 text-center" data-aos="fade-up" data-aos-duration="1400">
                     <div class="position-relative" style="min-height: 420px;">
 
-                        <!-- Floating decorative images — scattered around the portrait -->
+                        <!-- Floating decorative images -->
                         <div class="position-absolute" style="top:0; left:0; width:38%; border-radius:12px; overflow:hidden; opacity:0.82; transform:rotate(-3deg); z-index:1;">
-                            <img src="images/blog2.jpg" alt="" class="img-fluid" style="display:block; width:100%;">
+                            <img src="images/img3.jpg" alt="" class="img-fluid" style="display:block; width:100%;">
                         </div>
                         <div class="position-absolute" style="top:5%; right:0; width:34%; border-radius:12px; overflow:hidden; opacity:0.78; transform:rotate(2.5deg); z-index:1;">
-                            <img src="images/project4.jpg" alt="" class="img-fluid" style="display:block; width:100%;">
+                            <img src="images/img13.jpg" alt="" class="img-fluid" style="display:block; width:100%;">
                         </div>
                         <div class="position-absolute" style="bottom:0; left:2%; width:30%; border-radius:12px; overflow:hidden; opacity:0.75; transform:rotate(2deg); z-index:1;">
-                            <img src="images/portfolio4.jpg" alt="" class="img-fluid" style="display:block; width:100%;">
+                            <img src="images/img19.jpg" alt="" class="img-fluid" style="display:block; width:100%;">
                         </div>
                         <div class="position-absolute" style="bottom:2%; right:2%; width:33%; border-radius:12px; overflow:hidden; opacity:0.80; transform:rotate(-2deg); z-index:1;">
-                            <img src="images/portfolio-large1.jpg" alt="" class="img-fluid" style="display:block; width:100%;">
+                            <img src="images/img22.jpg" alt="" class="img-fluid" style="display:block; width:100%;">
                         </div>
 
-                        <!-- Portrait — centred on top -->
+                        <!-- Portrait centred on top -->
                         <div class="position-relative mx-auto" style="width:58%; z-index:2; margin-top:8%;">
                             <img src="images/author-image.jpg" alt="Hazel Aileen van der Walle"
                                 class="img-fluid" style="border-radius:50%; border: 2px solid rgba(255,255,255,0.15);">
@@ -183,6 +177,9 @@
                         </div>
 
                     </div>
+                </div>
+
+            </div>
                 </div>
 
                 <!-- Left: text -->
