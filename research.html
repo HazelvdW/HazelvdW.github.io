@@ -15,24 +15,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* ── Logo bar: separate row above nav ── */
-        #logo-bar {
-            padding: 0.6rem 1.5rem 0;
-            line-height: 0;
+        #header-nav { position: relative; overflow: visible; }
+        #site-logo {
+            position: absolute;
+            top: 50%; left: 1.2rem;
+            transform: translateY(-50%);
+            z-index: 100; line-height: 0;
         }
-        #logo-bar img { height: 5rem; width: auto; }
-
-        /* ── Collapse nav top margin ── */
-        #header-nav { margin-top: -0.3rem; padding-top: 0.4rem !important; padding-bottom: 0.4rem !important; }
-
-        /* ── Tighten section top ── */
+        #site-logo img { height: 5rem; width: auto; }
+        #header-nav .container-fluid { padding-left: 8rem; }
         section.padding-medium { padding-top: 0.5rem !important; }
-
-        /* ── Badge labels (Favourite, Preprint, etc.) readable ── */
         .badge { color: #1a0033 !important; }
-
-        /* ── Outline/solid BUTTONS keep their own colours; only override text ── */
-        /* We DON'T touch .btn generically — only the small label badges */
     </style>
 </head>
 
@@ -79,11 +72,8 @@
     <div class="preloader text-white fs-6 text-uppercase overflow-hidden"></div>
 
     <!-- Logo sits in its own bar, separate from nav -->
-    <div id="logo-bar">
-        <a href="index.html"><img src="images/logo.png" alt="HAVDW"></a>
-    </div>
-
-    <nav id="header-nav" class="navbar navbar-expand-lg py-2" data-bs-theme="dark">
+    <nav id="header-nav" class="navbar navbar-expand-lg py-4" data-bs-theme="dark">
+        <a id="site-logo" href="index.html"><img src="images/logo.png" alt="HAVDW"></a>
         <div class="container-fluid padding-side">
             <button class="navbar-toggler shadow-none ms-auto" type="button" data-bs-toggle="offcanvas"
                 data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">

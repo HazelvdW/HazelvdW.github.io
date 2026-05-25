@@ -23,24 +23,31 @@
 
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* ── Logo bar: separate row above nav ── */
-        #logo-bar {
-            padding: 0.6rem 1.5rem 0;
+        /* Logo: absolutely positioned over the nav, doesn't push anything */
+        #header-nav {
+            position: relative;
+            overflow: visible;
+        }
+        #site-logo {
+            position: absolute;
+            top: 50%;
+            left: 1.2rem;
+            transform: translateY(-50%);
+            z-index: 100;
             line-height: 0;
         }
-        #logo-bar img { height: 5rem; width: auto; }
-
-        /* ── Collapse nav top margin ── */
-        #header-nav { margin-top: -0.3rem; padding-top: 0.4rem !important; padding-bottom: 0.4rem !important; }
-
-        /* ── Tighten section top ── */
+        #site-logo img {
+            height: 5rem;
+            width: auto;
+        }
+        /* Give the nav links enough left padding so they don't overlap the logo */
+        #header-nav .container-fluid {
+            padding-left: 8rem;
+        }
+        /* Tighten nav-to-body gap */
         section.padding-medium { padding-top: 0.5rem !important; }
-
-        /* ── Badge labels (Favourite, Preprint, etc.) readable ── */
+        /* Badge labels (Favourite, Preprint, Ch.1 etc.) — dark purple so readable */
         .badge { color: #1a0033 !important; }
-
-        /* ── Outline/solid BUTTONS keep their own colours; only override text ── */
-        /* We DON'T touch .btn generically — only the small label badges */
     </style>
 </head>
 
@@ -94,12 +101,11 @@
 
     <div class="preloader text-white fs-6 text-uppercase overflow-hidden"></div>
 
-    <!-- Logo sits in its own bar, separate from nav -->
-    <div id="logo-bar">
-        <a href="index.html"><img src="images/logo.png" alt="HAVDW"></a>
-    </div>
-
-    <nav id="header-nav" class="navbar navbar-expand-lg py-2" data-bs-theme="dark">
+    <nav id="header-nav" class="navbar navbar-expand-lg py-4" data-bs-theme="dark">
+        <!-- Logo sits absolutely over the nav — no layout push -->
+        <a id="site-logo" href="index.html">
+            <img src="images/logo.png" alt="HAVDW">
+        </a>
         <div class="container-fluid padding-side">
             <button class="navbar-toggler shadow-none ms-auto" type="button" data-bs-toggle="offcanvas"
                 data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
@@ -118,13 +124,13 @@
                             <a class="nav-link active pe-lg-5" aria-current="page" href="index.html">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link  pe-lg-5" href="repositories.html">Repositories</a>
+                            <a class="nav-link pe-lg-5" href="repositories.html">Repositories</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link  pe-lg-5" href="research.html">Research</a>
+                            <a class="nav-link pe-lg-5" href="research.html">Research</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link  pe-lg-5" href="cv.html">CV</a>
+                            <a class="nav-link pe-lg-5" href="cv.html">CV</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link fw-bold border-bottom border-2 border-primary"
@@ -149,12 +155,13 @@
         <div class="container text-white">
             <div class="row flex-row-reverse justify-content-center align-items-center">
 
-                                <div class="col-lg-6 text-center" data-aos="fade-up" data-aos-duration="1400">
+                <!-- Right: portrait + floating corner images -->
+                <div class="col-lg-6 text-center" data-aos="fade-up" data-aos-duration="1400">
                     <div class="position-relative" style="min-height: 420px;">
 
-                        <!-- Floating decorative images -->
+                        <!-- Floating decorative images — img22 TL, img13 TR, img19 BL, img3 BR -->
                         <div class="position-absolute" style="top:0; left:0; width:38%; border-radius:12px; overflow:hidden; opacity:0.82; transform:rotate(-3deg); z-index:1;">
-                            <img src="images/img3.jpg" alt="" class="img-fluid" style="display:block; width:100%;">
+                            <img src="images/img22.jpg" alt="" class="img-fluid" style="display:block; width:100%;">
                         </div>
                         <div class="position-absolute" style="top:5%; right:0; width:34%; border-radius:12px; overflow:hidden; opacity:0.78; transform:rotate(2.5deg); z-index:1;">
                             <img src="images/img13.jpg" alt="" class="img-fluid" style="display:block; width:100%;">
@@ -163,7 +170,7 @@
                             <img src="images/img19.jpg" alt="" class="img-fluid" style="display:block; width:100%;">
                         </div>
                         <div class="position-absolute" style="bottom:2%; right:2%; width:33%; border-radius:12px; overflow:hidden; opacity:0.80; transform:rotate(-2deg); z-index:1;">
-                            <img src="images/img22.jpg" alt="" class="img-fluid" style="display:block; width:100%;">
+                            <img src="images/img3.jpg" alt="" class="img-fluid" style="display:block; width:100%;">
                         </div>
 
                         <!-- Portrait centred on top -->
@@ -179,13 +186,10 @@
                     </div>
                 </div>
 
-            </div>
-                </div>
-
                 <!-- Left: text -->
                 <div class="col-lg-6 mt-5">
                     <p class="letter-space text-primary fw-semibold fs-3" data-aos="fade-up" data-aos-duration="1000">
-                        Hi, I'm Hazel
+                        Hi, I'm Hazel °‧𓆝 𓆟 𓆞·｡
                     </p>
                     <h2 class="banner-size fw-medium display-3 my-4" data-aos="fade-up" data-aos-duration="1200">
                         music, imagination, & a dose of wonder
@@ -208,7 +212,7 @@
                             </div>
                         </a>
                         <a href="repositories.html" class="btn btn-outline-secondary position-relative pe-5">
-                            repositories
+                            view repositories
                             <div class="position-absolute top-50 end-0 translate-middle-y me-3">
                                 <svg class="arrow-right p-1" width="28" height="28">
                                     <use xlink:href="#arrow-right"></use>
@@ -219,6 +223,8 @@
                 </div>
 
             </div>
+        </div>
+    </section>            </div>
 
         </div>
     </section>
