@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hi 𓆝⋆. I'm Hazel A. vdW</title>
+    <title>Hazel Aileen van der Walle</title>
 
     <!-- Link Swiper's CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
@@ -57,7 +57,7 @@
     <nav id="header-nav" class="navbar navbar-expand-lg py-4" data-bs-theme="dark">
         <div class="container-fluid padding-side">
             <a class="navbar-brand" href="index.html">
-                <span style="font-size: 1.1rem; font-weight: 600; letter-spacing: 0.05em;">HAVDW</span>
+                <img src="images/logo.png" alt="HAVDW" style="height: 2.2rem; width: auto;">
             </a>
 
             <button class="navbar-toggler shadow-none" type="button" data-bs-toggle="offcanvas"
@@ -123,30 +123,50 @@
     <section id="hero" class="padding-medium position-relative">
         <div class="container text-white">
             <div class="row flex-row-reverse justify-content-center align-items-center">
+
+                <!-- Right: portrait + floating image mosaic -->
                 <div class="col-lg-6 text-center" data-aos="fade-up" data-aos-duration="1400">
-                    <div class="position-relative">
-                        <img src="images/banner-img.jpg" alt="Hazel Aileen van der Walle"
-                            class="img-fluid rounded-circle w-100 p-5">
-                        <div class="position-absolute top-0">
-                            <img src="images/banner-img-border.png" alt=""
-                                class="img-fluid rounded-circle animated-border">
+                    <div class="position-relative" style="min-height: 420px;">
+
+                        <!-- Floating decorative images — scattered around the portrait -->
+                        <div class="position-absolute" style="top:0; left:0; width:38%; border-radius:12px; overflow:hidden; opacity:0.82; transform:rotate(-3deg); z-index:1;">
+                            <img src="images/blog2.jpg" alt="" class="img-fluid" style="display:block; width:100%;">
                         </div>
+                        <div class="position-absolute" style="top:5%; right:0; width:34%; border-radius:12px; overflow:hidden; opacity:0.78; transform:rotate(2.5deg); z-index:1;">
+                            <img src="images/project4.jpg" alt="" class="img-fluid" style="display:block; width:100%;">
+                        </div>
+                        <div class="position-absolute" style="bottom:0; left:2%; width:30%; border-radius:12px; overflow:hidden; opacity:0.75; transform:rotate(2deg); z-index:1;">
+                            <img src="images/portfolio4.jpg" alt="" class="img-fluid" style="display:block; width:100%;">
+                        </div>
+                        <div class="position-absolute" style="bottom:2%; right:2%; width:33%; border-radius:12px; overflow:hidden; opacity:0.80; transform:rotate(-2deg); z-index:1;">
+                            <img src="images/portfolio-large1.jpg" alt="" class="img-fluid" style="display:block; width:100%;">
+                        </div>
+
+                        <!-- Portrait — centred on top -->
+                        <div class="position-relative mx-auto" style="width:58%; z-index:2; margin-top:8%;">
+                            <img src="images/author-image.JPG" alt="Hazel Aileen van der Walle"
+                                class="img-fluid" style="border-radius:50%; border: 2px solid rgba(255,255,255,0.15);">
+                            <div class="position-absolute top-0 start-0 w-100 h-100">
+                                <img src="images/banner-img-border.png" alt=""
+                                    class="img-fluid rounded-circle animated-border w-100">
+                            </div>
+                        </div>
+
                     </div>
                 </div>
+
+                <!-- Left: text -->
                 <div class="col-lg-6 mt-5">
                     <p class="letter-space text-primary fw-semibold fs-3" data-aos="fade-up" data-aos-duration="1000">
-                        Hi, I'm Hazel °‧𓆝 𓆟 𓆞·｡
+                        Hi, I'm Hazel
                     </p>
                     <h2 class="banner-size fw-medium display-3 my-4" data-aos="fade-up" data-aos-duration="1200">
-                        music, imagination, & a dose of wonder
+                        Listening, Imagining, Wondering
                     </h2>
                     <p data-aos="fade-up" data-aos-duration="1400">
-                        I'm currently a PhD researcher in music psychology at Durham University, 
-                        exploring what happens in people's mind when listening to music 
-                        — the images, stories, memories, and strange inner worlds that music
-                        influences, shapes, and colours. An imagination cartographer perhaps, mapping the 
-                        thoughtscapes of the mind sculpted by music.
-                        Equal parts scientist and dreamer. Have <i>you</i> tried dreaming with the lights on?
+                        I'm a PhD researcher in music psychology at Durham University, exploring what happens in the
+                        mind when music plays — the images, memories, stories, and strange inner worlds that sound
+                        conjures into being. Equal parts scientist and dreamer.
                     </p>
                     <div class="d-flex flex-wrap gap-3 mt-4" data-aos="fade-up" data-aos-duration="1600">
                         <a href="research.html" class="btn btn-outline-primary position-relative pe-5">
@@ -158,7 +178,7 @@
                             </div>
                         </a>
                         <a href="repositories.html" class="btn btn-outline-secondary position-relative pe-5">
-                            view repositories
+                            repositories
                             <div class="position-absolute top-50 end-0 translate-middle-y me-3">
                                 <svg class="arrow-right p-1" width="28" height="28">
                                     <use xlink:href="#arrow-right"></use>
@@ -167,7 +187,31 @@
                         </a>
                     </div>
                 </div>
+
             </div>
+
+            <!-- Atmospheric image strip -->
+            <div class="row mt-5 g-2" data-aos="fade-up" data-aos-duration="1200">
+                <div class="col-2" style="overflow:hidden; border-radius:8px; max-height:90px;">
+                    <img src="images/project2.jpg" alt="" class="img-fluid w-100 h-100" style="object-fit:cover; opacity:0.55;">
+                </div>
+                <div class="col-2" style="overflow:hidden; border-radius:8px; max-height:90px;">
+                    <img src="images/blog6.jpg" alt="" class="img-fluid w-100 h-100" style="object-fit:cover; opacity:0.55;">
+                </div>
+                <div class="col-2" style="overflow:hidden; border-radius:8px; max-height:90px;">
+                    <img src="images/portfolio-large2.jpg" alt="" class="img-fluid w-100 h-100" style="object-fit:cover; opacity:0.55;">
+                </div>
+                <div class="col-2" style="overflow:hidden; border-radius:8px; max-height:90px;">
+                    <img src="images/portfolio1.jpg" alt="" class="img-fluid w-100 h-100" style="object-fit:cover; opacity:0.55;">
+                </div>
+                <div class="col-2" style="overflow:hidden; border-radius:8px; max-height:90px;">
+                    <img src="images/project9.jpg" alt="" class="img-fluid w-100 h-100" style="object-fit:cover; opacity:0.55;">
+                </div>
+                <div class="col-2" style="overflow:hidden; border-radius:8px; max-height:90px;">
+                    <img src="images/project8.jpg" alt="" class="img-fluid w-100 h-100" style="object-fit:cover; opacity:0.55;">
+                </div>
+            </div>
+
         </div>
     </section>
 
