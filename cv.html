@@ -15,18 +15,37 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <style>
-        #header-nav { position: relative; overflow: visible; }
-        #header-nav .navbar-brand { pointer-events: auto; }
+        /* Logo: big, overlapping nav, no layout push */
+        #header-nav { position: relative; overflow: visible; min-height: 3rem; }
+        .navbar-brand-logo {
+            position: absolute; top: 50%; left: 1.2rem;
+            transform: translateY(-50%); z-index: 20; pointer-events: auto;
+        }
+        /* Tighten nav-to-body gap */
+        section.padding-medium { padding-top: 0.5rem !important; }
+        /* Fix ALL button text to dark purple so it's readable on neon/grey */
+        .btn { color: #1a0033 !important; }
+        .btn:hover { color: #1a0033 !important; }
+        /* Background layer sits behind everything */
+        .bg-scatter { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+        .container, nav, section, footer { position: relative; z-index: 1; }
     </style>
 </head>
 
 <body>
-    <!-- Background scatter -->
-    <div style="position:fixed; top:4%; right:2%; width:16%; opacity:0.1; transform:rotate(5deg); z-index:0; pointer-events:none; border-radius:14px; overflow:hidden;"><img src="images/project9.jpg" alt="" style="width:100%; display:block;"></div>
-    <div style="position:fixed; top:30%; right:1%; width:14%; opacity:0.09; transform:rotate(-3deg); z-index:0; pointer-events:none; border-radius:14px; overflow:hidden;"><img src="images/blog2.jpg" alt="" style="width:100%; display:block;"></div>
-    <div style="position:fixed; top:60%; right:3%; width:15%; opacity:0.08; transform:rotate(4deg); z-index:0; pointer-events:none; border-radius:14px; overflow:hidden;"><img src="images/portfolio4.jpg" alt="" style="width:100%; display:block;"></div>
-    <div style="position:fixed; top:10%; left:1%; width:13%; opacity:0.09; transform:rotate(-6deg); z-index:0; pointer-events:none; border-radius:14px; overflow:hidden;"><img src="images/project8.jpg" alt="" style="width:100%; display:block;"></div>
-    <div style="position:fixed; top:75%; left:2%; width:15%; opacity:0.08; transform:rotate(3deg); z-index:0; pointer-events:none; border-radius:14px; overflow:hidden;"><img src="images/portfolio-large2.jpg" alt="" style="width:100%; display:block;"></div>
+    <!-- bg scatter -->
+    <div style="position:fixed;top:2%;left:1%;width:22%;opacity:0.13;transform:rotate(-5deg);z-index:0;pointer-events:none;border-radius:16px;overflow:hidden;"><img src="images/img28.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:fixed;top:5%;right:1%;width:20%;opacity:0.13;transform:rotate(4deg);z-index:0;pointer-events:none;border-radius:16px;overflow:hidden;"><img src="images/img27.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:fixed;top:18%;left:8%;width:18%;opacity:0.13;transform:rotate(6deg);z-index:0;pointer-events:none;border-radius:16px;overflow:hidden;"><img src="images/img15.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:fixed;top:20%;right:5%;width:22%;opacity:0.13;transform:rotate(-3deg);z-index:0;pointer-events:none;border-radius:16px;overflow:hidden;"><img src="images/img42.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:fixed;top:35%;left:0%;width:20%;opacity:0.13;transform:rotate(3deg);z-index:0;pointer-events:none;border-radius:16px;overflow:hidden;"><img src="images/img13.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:fixed;top:38%;right:2%;width:19%;opacity:0.13;transform:rotate(-6deg);z-index:0;pointer-events:none;border-radius:16px;overflow:hidden;"><img src="images/img17.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:fixed;top:50%;left:6%;width:21%;opacity:0.13;transform:rotate(5deg);z-index:0;pointer-events:none;border-radius:16px;overflow:hidden;"><img src="images/img18.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:fixed;top:52%;right:0%;width:20%;opacity:0.13;transform:rotate(2deg);z-index:0;pointer-events:none;border-radius:16px;overflow:hidden;"><img src="images/img10.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:fixed;top:65%;left:1%;width:19%;opacity:0.13;transform:rotate(-4deg);z-index:0;pointer-events:none;border-radius:16px;overflow:hidden;"><img src="images/img7.png" alt="" style="width:100%;display:block;"></div>
+    <div style="position:fixed;top:68%;right:4%;width:22%;opacity:0.13;transform:rotate(6deg);z-index:0;pointer-events:none;border-radius:16px;overflow:hidden;"><img src="images/img19.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:fixed;top:80%;left:5%;width:20%;opacity:0.13;transform:rotate(-3deg);z-index:0;pointer-events:none;border-radius:16px;overflow:hidden;"><img src="images/img47.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:fixed;top:83%;right:1%;width:18%;opacity:0.13;transform:rotate(4deg);z-index:0;pointer-events:none;border-radius:16px;overflow:hidden;"><img src="images/img36.jpg" alt="" style="width:100%;display:block;"></div>
 
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
         <symbol id="arrow-right" viewBox="0 0 24 24">
@@ -54,8 +73,8 @@
 
     <nav id="header-nav" class="navbar navbar-expand-lg py-4" data-bs-theme="dark">
         <div class="container-fluid padding-side">
-                        <a class="navbar-brand" href="index.html" style="position:absolute; top:50%; left:1.5rem; transform:translateY(-50%); z-index:10;">
-                <img src="images/logo.png" alt="HAVDW" style="height: 3.8rem; width: auto;">
+            <a class="navbar-brand navbar-brand-logo" href="index.html">
+                <img src="images/logo.png" alt="HAVDW" style="height:5.5rem;width:auto;">
             </a>
             <button class="navbar-toggler shadow-none" type="button" data-bs-toggle="offcanvas"
                 data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
@@ -84,7 +103,7 @@
         </div>
     </nav>
 
-    <section class="padding-medium" style="padding-top:1rem;">
+    <section class="padding-medium">
         <div class="container text-white">
 
             <!-- Header -->
