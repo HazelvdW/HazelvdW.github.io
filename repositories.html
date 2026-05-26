@@ -292,10 +292,10 @@
                                     Plot any two normative variables against each other across all 356 clips —
                                     filter by genre, click any point to play its audio clip directly in your browser.
                                     Powered by Shiny + Plotly, running entirely client-side via WebAssembly.
-                                    <span class="text-secondary fst-italic">(Allow ~15s for the R runtime to load.)</span>
+                                    <span class="text-secondary fst-italic">Allow ~30–60s for the R runtime to start up on first load.</span>
                                 </p>
                             </div>
-                            <a href="musifeast.html"
+                            <button id="launch-musifeast"
                                 class="btn fw-semibold flex-shrink-0 position-relative pe-5"
                                 style="background:#39ff14; color:#1a0033 !important; border:none; border-radius: 2rem; white-space:nowrap;">
                                 Launch app ✦
@@ -304,11 +304,114 @@
                                         <use xlink:href="#arrow-right"></use>
                                     </svg>
                                 </div>
-                            </a>
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Full-screen modal — shown when Launch app is clicked -->
+            <div id="musifeast-modal"
+                style="display:none; position:fixed; inset:0; z-index:9999;
+                       background:rgba(0,0,0,0.97); flex-direction:column;">
+                <!-- Modal header bar -->
+                <div style="display:flex; align-items:center; justify-content:space-between;
+                            padding:0.6rem 1.2rem; background:#0d0d0d;
+                            border-bottom:1px solid rgba(57,255,20,0.25); flex-shrink:0;">
+                    <span style="color:#39ff14; font-weight:600; letter-spacing:0.05em; font-size:0.9rem;">
+                        ✦ MUSIFEAST-17 Interactive Stimulus Explorer
+                    </span>
+                    <button id="close-musifeast"
+                        style="background:none; border:1px solid rgba(255,255,255,0.2);
+                               color:white; border-radius:6px; padding:0.3rem 0.9rem;
+                               cursor:pointer; font-size:0.85rem;">
+                        ✕ Close
+                    </button>
+                </div>
+                <!-- Loading notice shown until iframe reports ready -->
+                <div id="musifeast-loading"
+                    style="position:absolute; top:60px; left:0; right:0; bottom:0;
+                           display:flex; flex-direction:column; align-items:center;
+                           justify-content:center; gap:1rem; pointer-events:none;">
+                    <p style="color:#39ff14; font-weight:600; letter-spacing:0.06em;">MUSIFEAST-17</p>
+                    <p style="color:rgba(255,255,255,0.5); font-size:0.85rem; max-width:320px; text-align:center; line-height:1.5;">
+                        Starting the R environment in your browser via WebAssembly —
+                        this takes about 30–60 seconds on first visit.
+                    </p>
+                    <div style="width:260px; height:4px; background:rgba(255,255,255,0.1); border-radius:2px; overflow:hidden;">
+                        <div id="musifeast-progress"
+                            style="height:100%; width:0%; background:linear-gradient(90deg,#39ff14,#00cfff);
+                                   border-radius:2px; transition:width 1s ease;"></div>
+                    </div>
+                </div>
+                <!-- The app iframe -->
+                <iframe id="musifeast-frame"
+                    src=""
+                    style="flex:1; border:none; width:100%; opacity:0; transition:opacity 0.5s;"
+                    allow="autoplay"
+                    title="MUSIFEAST-17 Interactive App">
+                </iframe>
+            </div>
+
+            <script>
+            (function() {
+                var modal    = document.getElementById('musifeast-modal');
+                var frame    = document.getElementById('musifeast-frame');
+                var loading  = document.getElementById('musifeast-loading');
+                var progress = document.getElementById('musifeast-progress');
+                var launched = false;
+                var timer    = null;
+
+                document.getElementById('launch-musifeast').addEventListener('click', function() {
+                    modal.style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+
+                    // Lazy-load: only set src on first open
+                    if (!launched) {
+                        launched = true;
+                        frame.src = 'https://hazelvdw.github.io/MUSIFEAST-17/app/';
+
+                        // Animate progress bar
+                        var pct = 0;
+                        timer = setInterval(function() {
+                            pct = Math.min(pct + (pct < 70 ? 2 : 0.3), 93);
+                            progress.style.width = pct + '%';
+                        }, 800);
+
+                        // When iframe loads, hide loading overlay
+                        frame.addEventListener('load', function() {
+                            clearInterval(timer);
+                            progress.style.width = '100%';
+                            setTimeout(function() {
+                                loading.style.display = 'none';
+                                frame.style.opacity = '1';
+                            }, 400);
+                        });
+                    }
+                });
+
+                document.getElementById('close-musifeast').addEventListener('click', function() {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = '';
+                });
+
+                // Close on backdrop click
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        modal.style.display = 'none';
+                        document.body.style.overflow = '';
+                    }
+                });
+
+                // Close on Escape
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && modal.style.display === 'flex') {
+                        modal.style.display = 'none';
+                        document.body.style.overflow = '';
+                    }
+                });
+            })();
+            </script>
 
             <!-- OSF repos -->
             <div class="row mt-5 mb-2" data-aos="fade-up" data-aos-duration="900">
