@@ -48,6 +48,19 @@
         section.padding-medium { padding-top: 0.5rem !important; }
         /* Badge labels (Favourite, Preprint, Ch.1 etc.) — dark purple so readable */
         .badge { color: #1a0033 !important; }
+        /* Purple repositories button — fills on hover like the green one */
+        .btn-purple-outline {
+            border: 2px solid #b44fff !important;
+            color: #b44fff !important;
+            border-radius: 2rem;
+            background: transparent;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+        .btn-purple-outline:hover {
+            background: #b44fff !important;
+            color: #1a0033 !important;
+        }
+        .btn-purple-outline:hover svg { color: #1a0033 !important; }
     </style>
 </head>
 
@@ -203,8 +216,7 @@
                         Equal parts scientist and dreamer. Have <i>you</i> tried dreaming with the lights on?
                     </p>
                     <div class="d-flex flex-wrap gap-3 mt-4" data-aos="fade-up" data-aos-duration="1600">
-                        <a href="repositories.html" class="btn position-relative pe-5"
-                            style="border: 2px solid #b44fff; color: #b44fff !important; border-radius: 2rem;">
+                        <a href="repositories.html" class="btn btn-purple-outline position-relative pe-5">
                             view repositories
                             <div class="position-absolute top-50 end-0 translate-middle-y me-3">
                                 <svg class="arrow-right p-1" width="28" height="28" style="color:#b44fff">
