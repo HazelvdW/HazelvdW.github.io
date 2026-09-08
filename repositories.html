@@ -13,6 +13,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Handjet&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <style>
         #header-nav { position: relative; overflow: visible; }
@@ -30,37 +32,234 @@
     </style>
 </head>
 
+<script type="text/javascript">
+// <![CDATA[
+var colours=new Array("#a6f", "#60f", "#60f", "#a6f", "#ccc"); // colours for top, right, bottom and left borders and background of bubbles
+var bubbles=66; // maximum number of bubbles on screen
+var over_or_under="over"; // set to "over" for bubbles to always be on top, or "under" to allow them to float behind other objects
+
+/****************************
+* JavaScript Bubble Cursor  *
+*(c)2010-13 mf2fm web-design*
+*  http://www.mf2fm.com/rv  *
+* DON'T EDIT BELOW THIS BOX *
+****************************/
+var x=ox=400;
+var y=oy=300;
+var swide=800;
+var shigh=600;
+var sleft=sdown=0;
+var bubb=new Array();
+var bubbx=new Array();
+var bubby=new Array();
+var bubbs=new Array();
+var sploosh=false;
+
+function addLoadEvent(funky) {
+  var oldonload=window.onload;
+  if (typeof(oldonload)!='function') window.onload=funky;
+  else window.onload=function() {
+    if (oldonload) oldonload();
+    funky();
+  }
+}
+
+addLoadEvent(buble);
+
+function buble() { if (document.getElementById) {
+  var i, rats, div;
+  for (i=0; i<bubbles; i++) {
+    rats=createDiv("3px", "3px");
+    rats.style.visibility="hidden";
+	rats.style.zIndex=(over_or_under=="over")?"1001":"0";
+
+    div=createDiv("auto", "auto");
+    rats.appendChild(div);
+    div=div.style;
+    div.top="1px";
+    div.left="0px";
+    div.bottom="1px";
+    div.right="0px";
+    div.borderLeft="1px solid "+colours[3];
+    div.borderRight="1px solid "+colours[1];
+
+    div=createDiv("auto", "auto");
+    rats.appendChild(div);
+    div=div.style;
+    div.top="0px";
+    div.left="1px";
+    div.right="1px";
+    div.bottom="0px"
+    div.borderTop="1px solid "+colours[0];
+    div.borderBottom="1px solid "+colours[2];
+
+    div=createDiv("auto", "auto");
+    rats.appendChild(div);
+    div=div.style;
+    div.left="1px";
+    div.right="1px";
+    div.bottom="1px";
+    div.top="1px";
+    div.backgroundColor=colours[4];
+    if (navigator.appName=="Microsoft Internet Explorer") div.filter="alpha(opacity=50)";
+    else div.opacity=0.5;
+    document.body.appendChild(rats);
+    bubb[i]=rats.style;
+  }
+  set_scroll();
+  set_width();
+  bubble();
+}}
+
+function bubble() {
+  var c;
+  if (Math.abs(x-ox)>1 || Math.abs(y-oy)>1) {
+    ox=x;
+    oy=y;
+    for (c=0; c<bubbles; c++) if (!bubby[c]) {
+      bubb[c].left=(bubbx[c]=x)+"px";
+      bubb[c].top=(bubby[c]=y-3)+"px";
+      bubb[c].width="3px";
+      bubb[c].height="3px"
+      bubb[c].visibility="visible";
+      bubbs[c]=3;
+      break;
+    }
+  }
+  for (c=0; c<bubbles; c++) if (bubby[c]) update_bubb(c);
+  setTimeout("bubble()", 40);
+}
+
+document.onmousedown=splash;
+document.onmouseup=function(){clearTimeout(sploosh);};
+
+function splash() {
+  ox=-1;
+  oy=-1;
+  sploosh=setTimeout('splash()', 100);
+}
+
+function update_bubb(i) {
+  if (bubby[i]) {
+    bubby[i]-=bubbs[i]/2+i%2;
+    bubbx[i]+=(i%5-2)/5;
+    if (bubby[i]>sdown && bubbx[i]>sleft && bubbx[i]<sleft+swide+bubbs[i]) {
+	  if (Math.random()<bubbs[i]/shigh*2 && bubbs[i]++<8) {
+		bubb[i].width=bubbs[i]+"px";
+		bubb[i].height=bubbs[i]+"px";
+	  }
+      bubb[i].top=bubby[i]+"px";
+      bubb[i].left=bubbx[i]+"px";
+    }
+    else {
+      bubb[i].visibility="hidden";
+      bubby[i]=0;
+      return;
+    }
+  }
+}
+
+document.onmousemove=mouse;
+function mouse(e) {
+  if (e) {
+    y=e.pageY;
+    x=e.pageX;
+  }
+  else {
+    set_scroll();
+    y=event.y+sdown;
+    x=event.x+sleft;
+  }
+}
+
+window.onresize=set_width;
+function set_width() {
+  var sw_min=999999;
+  var sh_min=999999;
+  if (document.documentElement && document.documentElement.clientWidth) {
+    if (document.documentElement.clientWidth>0) sw_min=document.documentElement.clientWidth;
+    if (document.documentElement.clientHeight>0) sh_min=document.documentElement.clientHeight;
+  }
+  if (typeof(self.innerWidth)=='number' && self.innerWidth) {
+    if (self.innerWidth>0 && self.innerWidth<sw_min) sw_min=self.innerWidth;
+    if (self.innerHeight>0 && self.innerHeight<sh_min) sh_min=self.innerHeight;
+  }
+  if (document.body.clientWidth) {
+    if (document.body.clientWidth>0 && document.body.clientWidth<sw_min) sw_min=document.body.clientWidth;
+    if (document.body.clientHeight>0 && document.body.clientHeight<sh_min) sh_min=document.body.clientHeight;
+  }
+  if (sw_min==999999 || sh_min==999999) {
+    sw_min=800;
+    sh_min=600;
+  }
+  swide=sw_min;
+  shigh=sh_min;
+}
+
+window.onscroll=set_scroll;
+function set_scroll() {
+  if (typeof(self.pageYOffset)=='number') {
+    sdown=self.pageYOffset;
+    sleft=self.pageXOffset;
+  }
+  else if (document.body && (document.body.scrollTop || document.body.scrollLeft)) {
+    sdown=document.body.scrollTop;
+    sleft=document.body.scrollLeft;
+  }
+  else if (document.documentElement && (document.documentElement.scrollTop || document.documentElement.scrollLeft)) {
+    sleft=document.documentElement.scrollLeft;
+    sdown=document.documentElement.scrollTop;
+  }
+  else {
+    sdown=0;
+    sleft=0;
+  }
+}
+
+function createDiv(height, width) {
+  var div=document.createElement("div");
+  div.style.position="absolute";
+  div.style.height=height;
+  div.style.width=width;
+  div.style.overflow="hidden";
+  div.style.backgroundColor="transparent";
+  return (div);
+}
+// ]]>
+</script>
+                        
+
 <body style="position:relative;">
     
     <!-- Scrollable collage background -->
     <div style="position:absolute;top:0;left:0;width:100%;min-height:250vh;z-index:0;pointer-events:none;">
-    <div style="position:absolute;top:5vh;left:4%;width:13%;opacity:0.15;transform:rotate(-5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img19.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:14vh;left:50%;width:14%;opacity:0.15;transform:rotate(3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img21.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:23vh;left:80%;width:12%;opacity:0.15;transform:rotate(6deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img13.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:32vh;left:20%;width:13%;opacity:0.15;transform:rotate(-3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img45.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:41vh;left:68%;width:15%;opacity:0.15;transform:rotate(4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img17.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:50vh;left:8%;width:12%;opacity:0.15;transform:rotate(-6deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img11.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:59vh;left:42%;width:14%;opacity:0.15;transform:rotate(5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img44.png" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:68vh;left:76%;width:13%;opacity:0.15;transform:rotate(-3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img46.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:77vh;left:14%;width:15%;opacity:0.15;transform:rotate(4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img10.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:86vh;left:60%;width:12%;opacity:0.15;transform:rotate(-5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img6.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:95vh;left:85%;width:13%;opacity:0.15;transform:rotate(3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img37.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:104vh;left:28%;width:14%;opacity:0.15;transform:rotate(-4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img16.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:113vh;left:55%;width:15%;opacity:0.15;transform:rotate(6deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img47.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:122vh;left:6%;width:12%;opacity:0.15;transform:rotate(-3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img2.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:131vh;left:38%;width:14%;opacity:0.15;transform:rotate(5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img36.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:140vh;left:72%;width:13%;opacity:0.15;transform:rotate(3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img39.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:149vh;left:18%;width:15%;opacity:0.15;transform:rotate(-6deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img29.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:158vh;left:46%;width:12%;opacity:0.15;transform:rotate(4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img24.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:167vh;left:82%;width:14%;opacity:0.15;transform:rotate(-3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img22.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:176vh;left:10%;width:13%;opacity:0.15;transform:rotate(5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img1.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:185vh;left:52%;width:15%;opacity:0.15;transform:rotate(-4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img40.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:194vh;left:78%;width:12%;opacity:0.15;transform:rotate(6deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img32.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:203vh;left:24%;width:14%;opacity:0.15;transform:rotate(3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img3.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:212vh;left:64%;width:13%;opacity:0.15;transform:rotate(-5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img27.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:221vh;left:3%;width:15%;opacity:0.15;transform:rotate(4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img42.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:230vh;left:35%;width:12%;opacity:0.15;transform:rotate(-3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img33.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:239vh;left:70%;width:14%;opacity:0.15;transform:rotate(5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img26.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:5vh;left:4%;width:13%;opacity:0.15;transform:rotate(-5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/sparkly-silver-colourful-material.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:14vh;left:50%;width:14%;opacity:0.15;transform:rotate(3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/orange-purple-blue-ink-bloom.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:23vh;left:80%;width:12%;opacity:0.15;transform:rotate(6deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/sparkly-stars-moons-suns.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:32vh;left:20%;width:13%;opacity:0.15;transform:rotate(-3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/lilac-sparky-orchids.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:41vh;left:68%;width:15%;opacity:0.15;transform:rotate(4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/pink-gossamer-fabric.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:50vh;left:8%;width:12%;opacity:0.15;transform:rotate(-6deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/bleeding-heart-flower-diagram.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:59vh;left:42%;width:14%;opacity:0.15;transform:rotate(5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/neon-colour-shifted-flowers.png" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:68vh;left:76%;width:13%;opacity:0.15;transform:rotate(-3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/deep-dark-purple-orchid.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:77vh;left:14%;width:15%;opacity:0.15;transform:rotate(4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/rainbow-moths.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:86vh;left:60%;width:12%;opacity:0.15;transform:rotate(-5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/long-fish-strip.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:95vh;left:85%;width:13%;opacity:0.15;transform:rotate(3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/pink-speckled-orchids.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:104vh;left:28%;width:14%;opacity:0.15;transform:rotate(-4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/blue-sparkly-fabric.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:113vh;left:55%;width:15%;opacity:0.15;transform:rotate(6deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/curly-whirly-orchid.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:122vh;left:6%;width:12%;opacity:0.15;transform:rotate(-3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/colour-shifted-flower-stamen.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:131vh;left:38%;width:14%;opacity:0.15;transform:rotate(5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/abstracted-shiny-closeup.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:140vh;left:72%;width:13%;opacity:0.15;transform:rotate(3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/white-shift-effect-orchids.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:149vh;left:18%;width:15%;opacity:0.15;transform:rotate(-6deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/purple-frill-bib-orchid.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:158vh;left:46%;width:12%;opacity:0.15;transform:rotate(4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/green-white-star-flower.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:167vh;left:82%;width:14%;opacity:0.15;transform:rotate(-3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/abstract-colour-flower-overlays.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:176vh;left:10%;width:13%;opacity:0.15;transform:rotate(5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/white-star-orchid-string.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:185vh;left:52%;width:15%;opacity:0.15;transform:rotate(-4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/purple-orchid-closeup.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:194vh;left:78%;width:12%;opacity:0.15;transform:rotate(6deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/mother-of-pearl-closeup.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:203vh;left:24%;width:14%;opacity:0.15;transform:rotate(3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/orange-star-orchids.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:212vh;left:64%;width:13%;opacity:0.15;transform:rotate(-5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/neon-transparent-orchids.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:221vh;left:3%;width:15%;opacity:0.15;transform:rotate(4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/light-pink-orchid-string.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:230vh;left:35%;width:12%;opacity:0.15;transform:rotate(-3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/pink-poofy-orhicd-string.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:239vh;left:70%;width:14%;opacity:0.15;transform:rotate(5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/tree-bark.jpg" alt="" style="width:100%;display:block;"></div>
     </div>
 
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
@@ -90,7 +289,7 @@
 
     <!-- Logo sits in its own bar, separate from nav -->
     <nav id="header-nav" class="navbar navbar-expand-lg py-4" data-bs-theme="dark">
-        <a id="site-logo" href="index.html"><img src="images/logo.png" alt="HAVDW"></a>
+        <a id="site-logo" href="index.html"><img src="images/logo.gif" alt="HAVDW"></a>
         <div class="container-fluid padding-side">
             <button class="navbar-toggler shadow-none ms-auto" type="button" data-bs-toggle="offcanvas"
                 data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
@@ -134,16 +333,20 @@
             <!-- Page header -->
             <div class="row mb-5">
                 <div class="col-lg-7">
-                    <p class="letter-space text-primary fw-semibold fs-5" data-aos="fade-up" data-aos-duration="800">
-                        GitHub &amp; OSF
+                    <p class="letter-space text-primary fw-semibold fs-1" data-aos="fade-up" data-aos-duration="800">
+                        GitHub Portfolio
                     </p>
                     <h1 class="display-4 fw-medium my-3" data-aos="fade-up" data-aos-duration="1000">Repositories</h1>
-                    <p data-aos="fade-up" data-aos-duration="1200">
+                    <p data-aos="fade-up" data-aos-duration="1200" style="font-size: 1.2rem; letter-spacing: 0.07em; line-height: 1.3;">
                         Open data, codebooks, analysis pipelines, and stimuli sets from my research —
                         all in one place.
                     </p>
+                    <p data-aos="fade-up" data-aos-duration="1200" style="font-size: 1.2rem; letter-spacing: 0.07em; line-height: 1.3;">
+                        Check out my portfolio via GitHub [link below], or enjoy a scroll through  this page
+                        <i>(plus an embedded interative Shiny app for my MUSIFEAST-17 stimulus set!)</i>.
+                    </p>
                     <a href="https://github.com/HazelvdW" target="_blank"
-                        class="btn btn-outline-primary mt-2 position-relative pe-5" data-aos="fade-up"
+                        class="btn btn-purple-outline mt-2 position-relative pe-5" data-aos="fade-up"
                         data-aos-duration="1400">
                         github.com/HazelvdW
                         <div class="position-absolute top-50 end-0 translate-middle-y me-3">
@@ -152,13 +355,6 @@
                             </svg>
                         </div>
                     </a>
-                </div>
-            </div>
-
-            <!-- GitHub repos -->
-            <div class="row mb-2" data-aos="fade-up" data-aos-duration="900">
-                <div class="col-12 mb-4">
-                    <h2 class="fs-5 fw-semibold text-primary letter-space">GitHub</h2>
                 </div>
             </div>
 
@@ -175,17 +371,17 @@
                                         style="color:var(--bs-primary)">
                                         <use xlink:href="#github"></use>
                                     </svg>
-                                    <h3 class="fs-6 fw-semibold mb-0 text-white">
+                                    <h3 class="fs-3 fw-semibold mb-0 text-white">
                                         Basslines-Bodies-BeehiveHaircuts
                                     </h3>
                                 </div>
                                 <div class="d-flex gap-2 flex-wrap">
-                                    <span class="badge bg-primary">Favourite :)</span>
+                                    <span class="badge bg-primary">Favourite project so far :)</span>
                                     <span class="badge bg-secondary">Qualitative</span>
                                     <span class="badge bg-secondary">Mixed-methods</span>
                                 </div>
                             </div>
-                            <p class="small text-secondary mb-3">
+                            <p class="small text-secondary mb-3" style="letter-spacing: 0.09em; line-height: 1.4;">
                                 Examining the qualitative contents of participants' descriptions of music-influenced
                                 mental content (MIMC) while listening to music from 10 genres. Mixed-method
                                 qualitative analysis of 14,091 descriptions — codebook, data, stimuli, and
@@ -215,7 +411,7 @@
                                         style="color:rgba(255,255,255,0.6)">
                                         <use xlink:href="#github"></use>
                                     </svg>
-                                    <h3 class="fs-6 fw-semibold mb-0 text-white">
+                                    <h3 class="fs-3 fw-semibold mb-0 text-white">
                                         context-framed-listening
                                     </h3>
                                 </div>
@@ -225,7 +421,7 @@
                                     <span class="badge bg-secondary">NLP</span>
                                 </div>
                             </div>
-                            <p class="small text-secondary mb-3">
+                            <p class="small text-secondary mb-3" style="letter-spacing: 0.09em; line-height: 1.4;">
                                 Computational text analysis pipeline for my current paper on context-framed listening.
                                 Two complementary pipelines using MiniLM and TF-IDF to calculate the semantic similarity 
                                 of free response music-influenced mental contents (MIMC) to same/different music clips, 
@@ -254,7 +450,7 @@
                                         style="color:rgba(255,255,255,0.6)">
                                         <use xlink:href="#github"></use>
                                     </svg>
-                                    <h3 class="fs-6 fw-semibold mb-0 text-white">
+                                    <h3 class="fs-3 fw-semibold mb-0 text-white">
                                         MUSIFEAST-17
                                     </h3>
                                 </div>
@@ -264,7 +460,7 @@
                                     <span class="badge bg-secondary">Openly available stimuli</span>
                                 </div>
                             </div>
-                            <p class="small text-secondary mb-3">
+                            <p class="small text-secondary mb-3" style="letter-spacing: 0.09em; line-height: 1.4;">
                                 356 instrumental 30-second clips across 17 genres, with normative data from 701
                                 UK &amp; US participants (ages 18–75). Ratings of familiarity, enjoyment, emotional
                                 expression, genre recognition, and evoked thought types. Includes a Shiny/Plotly app
@@ -287,8 +483,8 @@
                     <div class="border rounded p-4" style="border-color: rgba(57,255,20,0.25) !important; background: rgba(57,255,20,0.04);">
                         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
                             <div>
-                                <p class="fw-semibold mb-1" style="color:#39ff14;">✦ Interactive MUSIFEAST-17 Explorer</p>
-                                <p class="small text-secondary mb-0">
+                                <p class="fw-semibold mb-1" style="color:#39ff14; font-size: 1.51rem;">✦ Interactive MUSIFEAST-17 Explorer</p>
+                                <p class="small text-secondary mb-0" style="letter-spacing: 0.09em; line-height: 1.4;">
                                     Plot any two normative variables against each other across all 356 clips —
                                     filter by genre, click any point to play its audio clip directly in your browser.
                                     Powered by Shiny + Plotly, running entirely client-side via WebAssembly.
@@ -321,9 +517,8 @@
                     <span style="color:#39ff14; font-weight:600; letter-spacing:0.05em; font-size:0.9rem;">
                         ✦ MUSIFEAST-17 Interactive Stimulus Explorer
                     </span>
-                    <button id="close-musifeast"
-                        style="background:none; border:1px solid rgba(255,255,255,0.2);
-                               color:white; border-radius:6px; padding:0.3rem 0.9rem;
+                    <button id="close-musifeast" class="btn-purple-outline"
+                        style="border-radius:2rem; padding:0.3rem 0.9rem;
                                cursor:pointer; font-size:0.85rem;">
                         ✕ Close
                     </button>
@@ -377,71 +572,10 @@
             })();
             </script>
 
-            <!-- OSF repos -->
-            <div class="row mt-5 mb-2" data-aos="fade-up" data-aos-duration="900">
-                <div class="col-12 mb-4">
-                    <h2 class="fs-5 fw-semibold text-primary letter-space">OSF</h2>
-                </div>
-            </div>
-
-            <!-- OSF MUSIFEAST-17 -->
-            <div class="row mb-4" data-aos="fade-up" data-aos-duration="900">
-                <div class="col-12">
-                    <a href="https://osf.io/5ebz2" target="_blank" class="text-decoration-none">
-                        <div class="border rounded p-4 repo-card"
-                            style="border-color: rgba(255,255,255,0.12) !important; transition: border-color 0.2s;">
-                            <div class="d-flex align-items-start justify-content-between flex-wrap gap-3">
-                                <div class="d-flex align-items-center gap-3 mb-2">
-                                    <svg width="22" height="22" class="flex-shrink-0"
-                                        style="color:rgba(255,255,255,0.6)">
-                                        <use xlink:href="#osf"></use>
-                                    </svg>
-                                    <h3 class="fs-6 fw-semibold mb-0 text-white">
-                                        MUSIFEAST-17 — OSF Repository
-                                    </h3>
-                                </div>
-                                <span class="badge bg-secondary">Open Data</span>
-                            </div>
-                            <p class="small text-secondary mb-0">
-                                All MUSIFEAST-17 music stimuli, normative data tables, and supplementary materials.
-                                The canonical open archive for the dataset.
-                            </p>
-                        </div>
-                    </a>
-                </div>
-            </div>
-
-            <!-- OSF Thoughtscapes preprint / data — placeholder -->
-            <div class="row mb-4" data-aos="fade-up" data-aos-duration="900">
-                <div class="col-12">
-                    <a href="https://doi.org/10.31234/osf.io/ef3ry" target="_blank" class="text-decoration-none">
-                        <div class="border rounded p-4 repo-card"
-                            style="border-color: rgba(255,255,255,0.12) !important; transition: border-color 0.2s;">
-                            <div class="d-flex align-items-start justify-content-between flex-wrap gap-3">
-                                <div class="d-flex align-items-center gap-3 mb-2">
-                                    <svg width="22" height="22" class="flex-shrink-0"
-                                        style="color:rgba(255,255,255,0.6)">
-                                        <use xlink:href="#osf"></use>
-                                    </svg>
-                                    <h3 class="fs-6 fw-semibold mb-0 text-white">
-                                        Experiencing liveness from recorded music — Preprint
-                                    </h3>
-                                </div>
-                                <span class="badge bg-secondary">Preprint</span>
-                            </div>
-                            <p class="small text-secondary mb-0">
-                                Rai, L., van der Walle, H. A., Painting, J., &amp; Orgs, G. (2024).
-                                PsyArXiv preprint.
-                            </p>
-                        </div>
-                    </a>
-                </div>
-            </div>
-
             <!-- Related: Tuomas audio features -->
             <div class="row mt-5 mb-2" data-aos="fade-up" data-aos-duration="900">
                 <div class="col-12 mb-4">
-                    <h2 class="fs-5 fw-semibold text-primary letter-space">Related</h2>
+                    <h2 class="fs-3 fw-semibold text-primary letter-space">Related Project Repos</h2>
                 </div>
             </div>
 
@@ -457,15 +591,51 @@
                                         style="color:rgba(255,255,255,0.4)">
                                         <use xlink:href="#github"></use>
                                     </svg>
-                                    <h3 class="fs-6 fw-semibold mb-0 text-white">
-                                        MUSIFEAST17-audio <span class="text-secondary fw-normal">(Tuomas Eerola)</span>
+                                    <h3 class="fs-3 fw-semibold mb-0 text-white">
+                                        MUSIFEAST17-audio <span class="text-secondary fw-normal">(Tuomas Eerola) <i>audio feature extraction</i></span>
                                     </h3>
                                 </div>
                                 <span class="badge bg-secondary">Audio features</span>
                             </div>
-                            <p class="small text-secondary mb-0">
+                            <p class="small text-secondary mb-0" style="letter-spacing: 0.09em; line-height: 1.4;">
                                 Audio features for MUSIFEAST-17 extracted independently with MIR Toolbox by
                                 Tuomas Eerola. Full feature set and a reduced 33-feature set available.
+                            </p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- OSF repos -->
+            <div class="row mt-5 mb-2" data-aos="fade-up" data-aos-duration="900">
+                <div class="col-12 mb-4">
+                    <h2 class="fs-3 fw-semibold text-primary letter-space">OSF</h2>
+                    <h2 class="fs-5 fw-semibold text-primary letter-space">(Open Science Framework)</h2>
+
+                </div>
+            </div>
+
+            <!-- OSF MUSIFEAST-17 -->
+            <div class="row mb-4" data-aos="fade-up" data-aos-duration="900">
+                <div class="col-12">
+                    <a href="https://osf.io/5ebz2" target="_blank" class="text-decoration-none">
+                        <div class="border rounded p-4 repo-card"
+                            style="border-color: rgba(255,255,255,0.12) !important; transition: border-color 0.2s;">
+                            <div class="d-flex align-items-start justify-content-between flex-wrap gap-3">
+                                <div class="d-flex align-items-center gap-3 mb-2">
+                                    <svg width="22" height="22" class="flex-shrink-0"
+                                        style="color:rgba(255,255,255,0.6)">
+                                        <use xlink:href="#osf"></use>
+                                    </svg>
+                                    <h3 class="fs-3 fw-semibold mb-0 text-white">
+                                        MUSIFEAST-17 — OSF Repository
+                                    </h3>
+                                </div>
+                                <span class="badge bg-secondary">Open Data</span>
+                            </div>
+                            <p class="small text-secondary mb-0" style="letter-spacing: 0.09em; line-height: 1.4;">
+                                All MUSIFEAST-17 music stimuli, normative data tables, and supplementary materials.
+                                The canonical open archive for the dataset.
                             </p>
                         </div>
                     </a>

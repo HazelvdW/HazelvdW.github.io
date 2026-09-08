@@ -21,6 +21,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Handjet&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="styles.css">
     <style>
@@ -49,45 +51,232 @@
         section.padding-medium { padding-top: 0.5rem !important; }
         /* Badge labels (Favourite, Preprint, Ch.1 etc.) — dark purple so readable */
         .badge { color: #1a0033 !important; }
-        /* Purple repositories button — fills on hover like the green one */
-        .btn-purple-outline {
-            border: 2px solid #b44fff !important;
-            color: #ffffff !important;
-            border-radius: 2rem;
-            background: transparent;
-            transition: background 0.2s ease, color 0.2s ease;
-        }
-        .btn-purple-outline:hover {
-            background: #b44fff !important;
-            color: #1a0033 !important;
-        }
-        .btn-purple-outline:hover svg { color: #1a0033 !important; }
     </style>
 </head>
+
+<script type="text/javascript">
+// <![CDATA[
+var colours=new Array("#a6f", "#60f", "#60f", "#a6f", "#ccc"); // colours for top, right, bottom and left borders and background of bubbles
+var bubbles=66; // maximum number of bubbles on screen
+var over_or_under="over"; // set to "over" for bubbles to always be on top, or "under" to allow them to float behind other objects
+
+/****************************
+* JavaScript Bubble Cursor  *
+*(c)2010-13 mf2fm web-design*
+*  http://www.mf2fm.com/rv  *
+* DON'T EDIT BELOW THIS BOX *
+****************************/
+var x=ox=400;
+var y=oy=300;
+var swide=800;
+var shigh=600;
+var sleft=sdown=0;
+var bubb=new Array();
+var bubbx=new Array();
+var bubby=new Array();
+var bubbs=new Array();
+var sploosh=false;
+
+function addLoadEvent(funky) {
+  var oldonload=window.onload;
+  if (typeof(oldonload)!='function') window.onload=funky;
+  else window.onload=function() {
+    if (oldonload) oldonload();
+    funky();
+  }
+}
+
+addLoadEvent(buble);
+
+function buble() { if (document.getElementById) {
+  var i, rats, div;
+  for (i=0; i<bubbles; i++) {
+    rats=createDiv("3px", "3px");
+    rats.style.visibility="hidden";
+	rats.style.zIndex=(over_or_under=="over")?"1001":"0";
+
+    div=createDiv("auto", "auto");
+    rats.appendChild(div);
+    div=div.style;
+    div.top="1px";
+    div.left="0px";
+    div.bottom="1px";
+    div.right="0px";
+    div.borderLeft="1px solid "+colours[3];
+    div.borderRight="1px solid "+colours[1];
+
+    div=createDiv("auto", "auto");
+    rats.appendChild(div);
+    div=div.style;
+    div.top="0px";
+    div.left="1px";
+    div.right="1px";
+    div.bottom="0px"
+    div.borderTop="1px solid "+colours[0];
+    div.borderBottom="1px solid "+colours[2];
+
+    div=createDiv("auto", "auto");
+    rats.appendChild(div);
+    div=div.style;
+    div.left="1px";
+    div.right="1px";
+    div.bottom="1px";
+    div.top="1px";
+    div.backgroundColor=colours[4];
+    if (navigator.appName=="Microsoft Internet Explorer") div.filter="alpha(opacity=50)";
+    else div.opacity=0.5;
+    document.body.appendChild(rats);
+    bubb[i]=rats.style;
+  }
+  set_scroll();
+  set_width();
+  bubble();
+}}
+
+function bubble() {
+  var c;
+  if (Math.abs(x-ox)>1 || Math.abs(y-oy)>1) {
+    ox=x;
+    oy=y;
+    for (c=0; c<bubbles; c++) if (!bubby[c]) {
+      bubb[c].left=(bubbx[c]=x)+"px";
+      bubb[c].top=(bubby[c]=y-3)+"px";
+      bubb[c].width="3px";
+      bubb[c].height="3px"
+      bubb[c].visibility="visible";
+      bubbs[c]=3;
+      break;
+    }
+  }
+  for (c=0; c<bubbles; c++) if (bubby[c]) update_bubb(c);
+  setTimeout("bubble()", 40);
+}
+
+document.onmousedown=splash;
+document.onmouseup=function(){clearTimeout(sploosh);};
+
+function splash() {
+  ox=-1;
+  oy=-1;
+  sploosh=setTimeout('splash()', 100);
+}
+
+function update_bubb(i) {
+  if (bubby[i]) {
+    bubby[i]-=bubbs[i]/2+i%2;
+    bubbx[i]+=(i%5-2)/5;
+    if (bubby[i]>sdown && bubbx[i]>sleft && bubbx[i]<sleft+swide+bubbs[i]) {
+	  if (Math.random()<bubbs[i]/shigh*2 && bubbs[i]++<8) {
+		bubb[i].width=bubbs[i]+"px";
+		bubb[i].height=bubbs[i]+"px";
+	  }
+      bubb[i].top=bubby[i]+"px";
+      bubb[i].left=bubbx[i]+"px";
+    }
+    else {
+      bubb[i].visibility="hidden";
+      bubby[i]=0;
+      return;
+    }
+  }
+}
+
+document.onmousemove=mouse;
+function mouse(e) {
+  if (e) {
+    y=e.pageY;
+    x=e.pageX;
+  }
+  else {
+    set_scroll();
+    y=event.y+sdown;
+    x=event.x+sleft;
+  }
+}
+
+window.onresize=set_width;
+function set_width() {
+  var sw_min=999999;
+  var sh_min=999999;
+  if (document.documentElement && document.documentElement.clientWidth) {
+    if (document.documentElement.clientWidth>0) sw_min=document.documentElement.clientWidth;
+    if (document.documentElement.clientHeight>0) sh_min=document.documentElement.clientHeight;
+  }
+  if (typeof(self.innerWidth)=='number' && self.innerWidth) {
+    if (self.innerWidth>0 && self.innerWidth<sw_min) sw_min=self.innerWidth;
+    if (self.innerHeight>0 && self.innerHeight<sh_min) sh_min=self.innerHeight;
+  }
+  if (document.body.clientWidth) {
+    if (document.body.clientWidth>0 && document.body.clientWidth<sw_min) sw_min=document.body.clientWidth;
+    if (document.body.clientHeight>0 && document.body.clientHeight<sh_min) sh_min=document.body.clientHeight;
+  }
+  if (sw_min==999999 || sh_min==999999) {
+    sw_min=800;
+    sh_min=600;
+  }
+  swide=sw_min;
+  shigh=sh_min;
+}
+
+window.onscroll=set_scroll;
+function set_scroll() {
+  if (typeof(self.pageYOffset)=='number') {
+    sdown=self.pageYOffset;
+    sleft=self.pageXOffset;
+  }
+  else if (document.body && (document.body.scrollTop || document.body.scrollLeft)) {
+    sdown=document.body.scrollTop;
+    sleft=document.body.scrollLeft;
+  }
+  else if (document.documentElement && (document.documentElement.scrollTop || document.documentElement.scrollLeft)) {
+    sleft=document.documentElement.scrollLeft;
+    sdown=document.documentElement.scrollTop;
+  }
+  else {
+    sdown=0;
+    sleft=0;
+  }
+}
+
+function createDiv(height, width) {
+  var div=document.createElement("div");
+  div.style.position="absolute";
+  div.style.height=height;
+  div.style.width=width;
+  div.style.overflow="hidden";
+  div.style.backgroundColor="transparent";
+  return (div);
+}
+// ]]>
+</script>
+                        
 
 <body style="position:relative;">
     <!-- Scrollable collage background — positions in vh so they always spread full screen -->
     <div style="position:absolute;top:0;left:0;width:100%;min-height:100vh;z-index:0;pointer-events:none;">
-    <div style="position:absolute;top:3vh;left:2%;width:14%;opacity:0.15;transform:rotate(-5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img44.png" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:3vh;left:72%;width:13%;opacity:0.15;transform:rotate(4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img34.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:15vh;left:18%;width:16%;opacity:0.15;transform:rotate(6deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img2.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:10vh;left:58%;width:15%;opacity:0.15;transform:rotate(-3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img20.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:33vh;left:5%;width:13%;opacity:0.15;transform:rotate(3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img18.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:28vh;left:80%;width:14%;opacity:0.15;transform:rotate(-6deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img17.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:42vh;left:30%;width:15%;opacity:0.15;transform:rotate(5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img32.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:55vh;left:62%;width:13%;opacity:0.15;transform:rotate(2deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img8.png" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:57vh;left:8%;width:14%;opacity:0.15;transform:rotate(-4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img47.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:70vh;left:22%;width:13%;opacity:0.15;transform:rotate(4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img30.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:83vh;left:7%;width:15%;opacity:0.15;transform:rotate(-3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img6.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:83vh;left:68%;width:14%;opacity:0.15;transform:rotate(-5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img44.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:92vh;left:70%;width:16%;opacity:0.15;transform:rotate(4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img4.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:20vh;left:39%;width:14%;opacity:0.15;transform:rotate(3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img1.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:25vh;left:65%;width:13.5%;opacity:0.15;transform:rotate(-4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img11.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:36vh;left:50%;width:15%;opacity:0.15;transform:rotate(5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img24.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:60vh;left:42%;width:14.5%;opacity:0.15;transform:rotate(2deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img27.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:88vh;left:25%;width:13.5%;opacity:0.15;transform:rotate(4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img45.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:105vh;left:60%;width:15%;opacity:0.15;transform:rotate(3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img6.png" alt="" style="width:100%;display:block;"></div>
-    </div>
+<div style="position:absolute;top:3vh;left:2%;width:14%;opacity:0.15;transform:rotate(-5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/neon-colour-shifted-flowers.png" alt="" style="width:100%;display:block;"></div>
+<div style="position:absolute;top:3vh;left:72%;width:13%;opacity:0.15;transform:rotate(4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/curled-bleeding-heart-strings.jpg" alt="" style="width:100%;display:block;"></div>
+<div style="position:absolute;top:18vh;left:18%;width:16%;opacity:0.15;transform:rotate(6deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/colour-shifted-flower-stamen.jpg" alt="" style="width:100%;display:block;"></div>
+<div style="position:absolute;top:12vh;left:58%;width:15%;opacity:0.15;transform:rotate(-3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/pink-blue-neon-cells.jpg" alt="" style="width:100%;display:block;"></div>
+<div style="position:absolute;top:40vh;left:5%;width:13%;opacity:0.15;transform:rotate(3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/iridescent-material-scrunch.jpg" alt="" style="width:100%;display:block;"></div>
+<div style="position:absolute;top:33vh;left:80%;width:14%;opacity:0.15;transform:rotate(-6deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/pink-gossamer-fabric.jpg" alt="" style="width:100%;display:block;"></div>
+<div style="position:absolute;top:52vh;left:30%;width:15%;opacity:0.15;transform:rotate(5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/mother-of-pearl-closeup.jpg" alt="" style="width:100%;display:block;"></div>
+<div style="position:absolute;top:68vh;left:62%;width:13%;opacity:0.15;transform:rotate(2deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/loads-of-jellyfish.png" alt="" style="width:100%;display:block;"></div>
+<div style="position:absolute;top:70vh;left:8%;width:14%;opacity:0.15;transform:rotate(-4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/curly-whirly-orchid.jpg" alt="" style="width:100%;display:block;"></div>
+<div style="position:absolute;top:87vh;left:22%;width:13%;opacity:0.15;transform:rotate(4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/deep-purple-orchid-closeup.jpg" alt="" style="width:100%;display:block;"></div>
+<div style="position:absolute;top:105vh;left:7%;width:15%;opacity:0.15;transform:rotate(-3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/long-fish-strip.jpg" alt="" style="width:100%;display:block;"></div>
+<div style="position:absolute;top:105vh;left:68%;width:14%;opacity:0.15;transform:rotate(-5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/neon-blue-orchids.jpg" alt="" style="width:100%;display:block;"></div>
+<div style="position:absolute;top:118vh;left:70%;width:16%;opacity:0.15;transform:rotate(4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/soft-lilac-orchids.jpg" alt="" style="width:100%;display:block;"></div>
+<div style="position:absolute;top:24vh;left:39%;width:14%;opacity:0.15;transform:rotate(3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/white-star-orchid-string.jpg" alt="" style="width:100%;display:block;"></div>
+<div style="position:absolute;top:29vh;left:65%;width:13.5%;opacity:0.15;transform:rotate(-4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/bleeding-heart-flower-diagram.jpg" alt="" style="width:100%;display:block;"></div>
+<div style="position:absolute;top:45vh;left:50%;width:15%;opacity:0.15;transform:rotate(5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/green-white-star-flower.jpg" alt="" style="width:100%;display:block;"></div>
+<div style="position:absolute;top:78vh;left:42%;width:14.5%;opacity:0.15;transform:rotate(2deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/neon-transparent-orchids.jpg" alt="" style="width:100%;display:block;"></div>
+<div style="position:absolute;top:112vh;left:25%;width:13.5%;opacity:0.15;transform:rotate(4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/lilac-sparky-orchids.jpg" alt="" style="width:100%;display:block;"></div>
+<div style="position:absolute;top:130vh;left:60%;width:15%;opacity:0.15;transform:rotate(3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/long-fish-strip.png" alt="" style="width:100%;display:block;"></div>
+<div style="position:absolute;top:145vh;left:15%;width:14%;opacity:0.15;transform:rotate(-4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/neon-colour-shifted-flowers.png" alt="" style="width:100%;display:block;"></div>
+<div style="position:absolute;top:150vh;left:75%;width:13%;opacity:0.15;transform:rotate(5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/curly-whirly-orchid.jpg" alt="" style="width:100%;display:block;"></div>
+<div style="position:absolute;top:160vh;left:45%;width:15%;opacity:0.15;transform:rotate(-3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/mother-of-pearl-closeup.jpg" alt="" style="width:100%;display:block;"></div>
+</div>
 
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
         <symbol id="arrow-right" viewBox="0 0 24 24">
@@ -121,7 +310,7 @@
     <nav id="header-nav" class="navbar navbar-expand-lg py-4" data-bs-theme="dark">
         <!-- Logo sits absolutely over the nav — no layout push -->
         <a id="site-logo" href="index.html">
-            <img src="images/logo.png" alt="HAVDW">
+            <img src="images/logo.gif" alt="HAVDW">
         </a>
         <div class="container-fluid padding-side">
             <button class="navbar-toggler shadow-none ms-auto" type="button" data-bs-toggle="offcanvas"
@@ -176,42 +365,47 @@
                 <div class="col-lg-6 text-center" data-aos="fade-up" data-aos-duration="1400">
                     <div class="position-relative" style="min-height: 420px;">
 
-                        <!-- Floating decorative images — img22 TL, img13 TR, img19 BL, img3 BR -->
-                        <div class="position-absolute" style="top:0; left:0; width:38%; border-radius:12px; overflow:hidden; opacity:0.82; transform:rotate(-3deg); z-index:1;">
-                            <img src="images/img22.jpg" alt="" class="img-fluid" style="display:block; width:100%;">
+                      <!-- Floating decorative framing images (top two) -->
+                      <div class="position-absolute" style="top:0; left:0; width:38%; border-radius:12px; overflow:hidden; opacity:0.82; transform:rotate(-3deg); z-index:1;">
+                           <img src="images/abstract-colour-flower-overlays.jpg" alt="" class="img-fluid" style="display:block; width:100%;">
                         </div>
-                        <div class="position-absolute" style="top:5%; right:0; width:34%; border-radius:12px; overflow:hidden; opacity:0.78; transform:rotate(2.5deg); z-index:1;">
-                            <img src="images/img13.jpg" alt="" class="img-fluid" style="display:block; width:100%;">
-                        </div>
-                        <div class="position-absolute" style="bottom:0; left:4%; width:30%; border-radius:12px; overflow:hidden; opacity:0.75; transform:rotate(2deg); z-index:1;">
-                            <img src="images/img19.jpg" alt="" class="img-fluid" style="display:block; width:100%;">
-                        </div>
-                        <div class="position-absolute" style="bottom:1%; right:2%; width:33%; border-radius:12px; overflow:hidden; opacity:0.80; transform:rotate(-2deg); z-index:1;">
-                            <img src="images/img3.jpg" alt="" class="img-fluid" style="display:block; width:100%;">
-                        </div>
+                     <div class="position-absolute" style="top:-8%; right:0; width:34%; border-radius:12px; overflow:hidden; opacity:0.78; transform:rotate(2.5deg); z-index:1;">
+                          <img src="images/sparkly-stars-moons-suns.jpg" alt="" class="img-fluid" style="display:block; width:100%;">
+                      </div>
 
-                        <!-- Portrait centred on top -->
-                        <div class="position-relative mx-auto" style="width:58%; z-index:2; margin-top:8%;">
-                            <img src="images/author-image.jpg" alt="Hazel Aileen van der Walle"
-                                class="img-fluid" style="border-radius:50%; border: 2px solid rgba(255,255,255,0.15);">
-                            <div class="position-absolute top-0 start-0 w-100 h-100">
-                                <img src="images/banner-img-border.png" alt=""
-                                    class="img-fluid rounded-circle animated-border w-100">
-                            </div>
-                        </div>
+                     <!-- Portrait centred on top, bottom two decorative images nested inside it -->
+                      <div class="position-relative mx-auto" style="width:58%; z-index:2; margin-top:8%;">
+                          <img src="images/author-image.jpg" alt="Hazel Aileen van der Walle"
+                              class="img-fluid position-relative" style="border-radius:50%; border: 2px solid rgba(255,255,255,0.15); z-index:2;">
+                          <div class="position-absolute top-0 start-0 w-100 h-100" style="z-index:2;">
+                              <img src="images/banner-img-border.png" alt=""
+                                  class="img-fluid rounded-circle animated-border w-100">
+                          </div>
 
-                    </div>
+                            <!-- Floating decorative framing images (bottom two) anchored to the portrait's box -->
+                         <div class="position-absolute" style="bottom:-8%; left:-23%; width:52%; border-radius:12px; overflow:hidden; opacity:0.75; transform:rotate(2deg); z-index:1;">
+                               <img src="images/sparkly-silver-colourful-material.jpg" alt="" class="img-fluid" style="display:block; width:100%;">
+                         </div>
+                          <div class="position-absolute" style="bottom:-4%; right:-43%; width:56%; border-radius:12px; overflow:hidden; opacity:0.80; transform:rotate(-2deg); z-index:1;">
+                                <img src="images/orange-star-orchids.jpg" alt="" class="img-fluid" style="display:block; width:100%;">
+                           </div>
+                      </div>
+
+                 </div>
                 </div>
 
                 <!-- Left: text -->
                 <div class="col-lg-6 mt-5">
-                    <p class="letter-space text-primary fw-semibold fs-3" data-aos="fade-up" data-aos-duration="1000">
-                        Hi, I'm Hazel °‧𓆝 𓆟 𓆞·｡
+                    <p class="letter-space text-primary fw-normal fs-1" data-aos="fade-up" data-aos-duration="1000">
+                        Hi, I'm Hazel
+                    </p>
+                    <p class="letter-space text-primary fw-normal fs-3" data-aos="fade-up" data-aos-duration="1000">
+                        °‧𓆝 𓆟 𓆞·｡
                     </p>
                     <h2 class="banner-size fw-medium display-3 my-4" data-aos="fade-up" data-aos-duration="1200">
                         music, imagination, & a dose of wonder
                     </h2>
-                    <p data-aos="fade-up" data-aos-duration="1400">
+                    <p data-aos="fade-up" data-aos-duration="1400" style="font-size: 1.42rem; letter-spacing: 0.1em; line-height: 1.1;">
                         I'm currently a PhD researcher in music psychology at Durham University, 
                         exploring what happens in people's mind when listening to music 
                         — the images, stories, memories, and strange inner worlds that music
@@ -244,26 +438,50 @@
     </section>
 
     <!-- Big floating logo — below the hero, centred, slightly larger than the portrait -->
-    <div class="text-center position-relative" style="z-index:1; margin: -1rem auto 3rem; pointer-events:none;">
-        <img src="images/logo.png" alt="" style="width: min(55vw, 560px); opacity: 0.92;">
+    <div class="text-center position-relative" style="z-index:1; margin: -rem auto 1rem; pointer-events:none;">
+        <img src="images/logo.gif" alt="" style="width: min(55vw, 560px); opacity: 0.92;">
     </div>
 
-    <!-- fishies quote under logo, green, centred, same style as Hi, I'm Hazel °‧𓆝 𓆟 𓆞·｡-->
-    <p class="letter-space text-primary fw-semibold fs-3 text-center" data-aos="fade-up" data-aos-duration="1000">
-        "No idea is mine, it is simply a fish I caught."
-    </p>
-    <p class="letter-space text-primary fw-semibold fs-3 text-center" data-aos="fade-up" data-aos-duration="1100">
-        °‧𓆝 𓆟 𓆞·｡
-    </p>
-    <p class="text-center mx-auto" style="max-width: 1050px; font-size: 1.1rem; line-height: 1.6;" data-aos="fade-up" data-aos-duration="1200">
-        Let go of ownership.<br>
-        Learn to swim with the currents of inspiration and share in the delights of the catch.<br>
-        The joy is not in possessing the fish, but in the act of fishing itself — the thrill of discovery, the dance with the unknown, and the shared indulgence in what we catch together.<br>
-        Creativity is a vast ocean teeming with ideas, curiosity is the best bait, but a full net is always better reeled in with others.<br>
-        Let's go fishing!<br>
-    </p>
+    <div class="position-relative mx-auto" style="max-width: 1300px;">
 
-    <!-- Fixed side socials (desktop) -->
+        <p class="letter-space text-primary fw-normal fs-1 text-center" data-aos="fade-up" data-aos-duration="1000">
+            "No idea is mine, it is simply a fish I caught."
+        </p>
+        <p class="letter-space text-primary fw-semibold fs-3 text-center" data-aos="fade-up" data-aos-duration="1100">
+            °‧𓆝 𓆟 𓆞·｡
+        </p>
+        <p class="text-center mx-auto" style="max-width: 1050px; font-size: 1.4rem; letter-spacing: 0.07em; line-height: 1.6;" data-aos="fade-up" data-aos-duration="1200">
+            Let go of ownership.<br>
+            Learn to swim with the currents of inspiration and share in the delights of the catch.<br>
+            The joy is not in possessing the fish, but in the act of fishing itself — the thrill of discovery, the dance with the unknown, and the shared indulgence in what we catch together.<br>
+            Creativity is a vast ocean teeming with ideas, curiosity is the best bait, but a full net is always better reeled in with others.<br>
+            Let's go fishing!<br>
+        </p>
+
+        <div class="d-flex flex-wrap justify-content-center align-items-center gap-4 my-4">
+            <img src="images/manta-ray.gif" alt="" style="width:240px;">
+            <img src="images/fishie-stamp.gif" alt="" style="width:200px;">
+            <img src="images/pixel-jellyfish.gif" alt="" style="width:200px;">
+            <img src="images/believe-in-jellyfish.gif" alt="" style="width:280px;">
+            <img src="images/diagonal-fishies.gif" alt="" style="width:200px;">
+            <img src="images/pixel-fish.gif" alt="" style="width:240px;">
+            <img src="images/i-like-fish.gif" alt="" style="width:280px;">
+            <a href="https://www.youtube.com/watch?v=chBvksW4yQI" target="_blank">
+                <img src="images/i-love-lobster.gif" alt="" style="width:280px;">
+            </a>
+            <img src="images/hooked-on-blinkies.gif" alt="" style="width:280px;">
+        </div>
+
+    </div>
+
+    <div class="text-center my-4">
+        <img src="images/wave-divider.gif" alt="" style="max-width: 300%;">
+    </div>
+    <div class="text-center my-4">
+        <img src="images/youre-ready.JPG" alt="" class="img-fluid" style="max-width: 700px;">
+    </div>  
+
+    <!-- Side socials (desktop) -->
     <section id="socials" class="position-fixed bottom-0 start-0 ms-5 mb-5">
         <ul class="d-none d-lg-block list-unstyled justify-content-center">
             <li><a class="nav-link mb-3" href="https://github.com/HazelvdW" target="_blank" title="GitHub">

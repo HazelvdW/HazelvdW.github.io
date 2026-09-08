@@ -13,6 +13,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Handjet&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <style>
         #header-nav { position: relative; overflow: visible; }
@@ -30,37 +32,234 @@
     </style>
 </head>
 
+<script type="text/javascript">
+// <![CDATA[
+var colours=new Array("#a6f", "#60f", "#60f", "#a6f", "#ccc"); // colours for top, right, bottom and left borders and background of bubbles
+var bubbles=66; // maximum number of bubbles on screen
+var over_or_under="over"; // set to "over" for bubbles to always be on top, or "under" to allow them to float behind other objects
+
+/****************************
+* JavaScript Bubble Cursor  *
+*(c)2010-13 mf2fm web-design*
+*  http://www.mf2fm.com/rv  *
+* DON'T EDIT BELOW THIS BOX *
+****************************/
+var x=ox=400;
+var y=oy=300;
+var swide=800;
+var shigh=600;
+var sleft=sdown=0;
+var bubb=new Array();
+var bubbx=new Array();
+var bubby=new Array();
+var bubbs=new Array();
+var sploosh=false;
+
+function addLoadEvent(funky) {
+  var oldonload=window.onload;
+  if (typeof(oldonload)!='function') window.onload=funky;
+  else window.onload=function() {
+    if (oldonload) oldonload();
+    funky();
+  }
+}
+
+addLoadEvent(buble);
+
+function buble() { if (document.getElementById) {
+  var i, rats, div;
+  for (i=0; i<bubbles; i++) {
+    rats=createDiv("3px", "3px");
+    rats.style.visibility="hidden";
+	rats.style.zIndex=(over_or_under=="over")?"1001":"0";
+
+    div=createDiv("auto", "auto");
+    rats.appendChild(div);
+    div=div.style;
+    div.top="1px";
+    div.left="0px";
+    div.bottom="1px";
+    div.right="0px";
+    div.borderLeft="1px solid "+colours[3];
+    div.borderRight="1px solid "+colours[1];
+
+    div=createDiv("auto", "auto");
+    rats.appendChild(div);
+    div=div.style;
+    div.top="0px";
+    div.left="1px";
+    div.right="1px";
+    div.bottom="0px"
+    div.borderTop="1px solid "+colours[0];
+    div.borderBottom="1px solid "+colours[2];
+
+    div=createDiv("auto", "auto");
+    rats.appendChild(div);
+    div=div.style;
+    div.left="1px";
+    div.right="1px";
+    div.bottom="1px";
+    div.top="1px";
+    div.backgroundColor=colours[4];
+    if (navigator.appName=="Microsoft Internet Explorer") div.filter="alpha(opacity=50)";
+    else div.opacity=0.5;
+    document.body.appendChild(rats);
+    bubb[i]=rats.style;
+  }
+  set_scroll();
+  set_width();
+  bubble();
+}}
+
+function bubble() {
+  var c;
+  if (Math.abs(x-ox)>1 || Math.abs(y-oy)>1) {
+    ox=x;
+    oy=y;
+    for (c=0; c<bubbles; c++) if (!bubby[c]) {
+      bubb[c].left=(bubbx[c]=x)+"px";
+      bubb[c].top=(bubby[c]=y-3)+"px";
+      bubb[c].width="3px";
+      bubb[c].height="3px"
+      bubb[c].visibility="visible";
+      bubbs[c]=3;
+      break;
+    }
+  }
+  for (c=0; c<bubbles; c++) if (bubby[c]) update_bubb(c);
+  setTimeout("bubble()", 40);
+}
+
+document.onmousedown=splash;
+document.onmouseup=function(){clearTimeout(sploosh);};
+
+function splash() {
+  ox=-1;
+  oy=-1;
+  sploosh=setTimeout('splash()', 100);
+}
+
+function update_bubb(i) {
+  if (bubby[i]) {
+    bubby[i]-=bubbs[i]/2+i%2;
+    bubbx[i]+=(i%5-2)/5;
+    if (bubby[i]>sdown && bubbx[i]>sleft && bubbx[i]<sleft+swide+bubbs[i]) {
+	  if (Math.random()<bubbs[i]/shigh*2 && bubbs[i]++<8) {
+		bubb[i].width=bubbs[i]+"px";
+		bubb[i].height=bubbs[i]+"px";
+	  }
+      bubb[i].top=bubby[i]+"px";
+      bubb[i].left=bubbx[i]+"px";
+    }
+    else {
+      bubb[i].visibility="hidden";
+      bubby[i]=0;
+      return;
+    }
+  }
+}
+
+document.onmousemove=mouse;
+function mouse(e) {
+  if (e) {
+    y=e.pageY;
+    x=e.pageX;
+  }
+  else {
+    set_scroll();
+    y=event.y+sdown;
+    x=event.x+sleft;
+  }
+}
+
+window.onresize=set_width;
+function set_width() {
+  var sw_min=999999;
+  var sh_min=999999;
+  if (document.documentElement && document.documentElement.clientWidth) {
+    if (document.documentElement.clientWidth>0) sw_min=document.documentElement.clientWidth;
+    if (document.documentElement.clientHeight>0) sh_min=document.documentElement.clientHeight;
+  }
+  if (typeof(self.innerWidth)=='number' && self.innerWidth) {
+    if (self.innerWidth>0 && self.innerWidth<sw_min) sw_min=self.innerWidth;
+    if (self.innerHeight>0 && self.innerHeight<sh_min) sh_min=self.innerHeight;
+  }
+  if (document.body.clientWidth) {
+    if (document.body.clientWidth>0 && document.body.clientWidth<sw_min) sw_min=document.body.clientWidth;
+    if (document.body.clientHeight>0 && document.body.clientHeight<sh_min) sh_min=document.body.clientHeight;
+  }
+  if (sw_min==999999 || sh_min==999999) {
+    sw_min=800;
+    sh_min=600;
+  }
+  swide=sw_min;
+  shigh=sh_min;
+}
+
+window.onscroll=set_scroll;
+function set_scroll() {
+  if (typeof(self.pageYOffset)=='number') {
+    sdown=self.pageYOffset;
+    sleft=self.pageXOffset;
+  }
+  else if (document.body && (document.body.scrollTop || document.body.scrollLeft)) {
+    sdown=document.body.scrollTop;
+    sleft=document.body.scrollLeft;
+  }
+  else if (document.documentElement && (document.documentElement.scrollTop || document.documentElement.scrollLeft)) {
+    sleft=document.documentElement.scrollLeft;
+    sdown=document.documentElement.scrollTop;
+  }
+  else {
+    sdown=0;
+    sleft=0;
+  }
+}
+
+function createDiv(height, width) {
+  var div=document.createElement("div");
+  div.style.position="absolute";
+  div.style.height=height;
+  div.style.width=width;
+  div.style.overflow="hidden";
+  div.style.backgroundColor="transparent";
+  return (div);
+}
+// ]]>
+</script>
+<!-- end of bubble cursor script :) -->
+
 <body style="position:relative;">
     
     <!-- Scrollable collage background -->
     <div style="position:absolute;top:0;left:0;width:100%;min-height:250vh;z-index:0;pointer-events:none;">
-    <div style="position:absolute;top:5vh;left:4%;width:13%;opacity:0.15;transform:rotate(-5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img28.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:14vh;left:50%;width:14%;opacity:0.15;transform:rotate(3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img27.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:23vh;left:80%;width:12%;opacity:0.15;transform:rotate(6deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img15.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:32vh;left:20%;width:13%;opacity:0.15;transform:rotate(-3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img42.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:41vh;left:68%;width:15%;opacity:0.15;transform:rotate(4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img13.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:50vh;left:8%;width:12%;opacity:0.15;transform:rotate(-6deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img17.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:59vh;left:42%;width:14%;opacity:0.15;transform:rotate(5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img18.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:68vh;left:76%;width:13%;opacity:0.15;transform:rotate(-3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img10.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:77vh;left:14%;width:15%;opacity:0.15;transform:rotate(4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img7.png" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:86vh;left:60%;width:12%;opacity:0.15;transform:rotate(-5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img19.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:95vh;left:85%;width:13%;opacity:0.15;transform:rotate(3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img47.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:104vh;left:28%;width:14%;opacity:0.15;transform:rotate(-4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img36.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:113vh;left:55%;width:15%;opacity:0.15;transform:rotate(6deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img40.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:122vh;left:6%;width:12%;opacity:0.15;transform:rotate(-3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img34.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:131vh;left:38%;width:14%;opacity:0.15;transform:rotate(5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img8.png" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:140vh;left:72%;width:13%;opacity:0.15;transform:rotate(3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img16.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:149vh;left:18%;width:15%;opacity:0.15;transform:rotate(-6deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img26.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:158vh;left:46%;width:12%;opacity:0.15;transform:rotate(4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img22.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:167vh;left:82%;width:14%;opacity:0.15;transform:rotate(-3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img21.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:176vh;left:10%;width:13%;opacity:0.15;transform:rotate(5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img33.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:185vh;left:52%;width:15%;opacity:0.15;transform:rotate(-4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img44.png" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:194vh;left:78%;width:12%;opacity:0.15;transform:rotate(6deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img46.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:203vh;left:24%;width:14%;opacity:0.15;transform:rotate(3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img24.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:212vh;left:64%;width:13%;opacity:0.15;transform:rotate(-5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img48.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:221vh;left:3%;width:15%;opacity:0.15;transform:rotate(4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img6.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:230vh;left:35%;width:12%;opacity:0.15;transform:rotate(-3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img43.jpg" alt="" style="width:100%;display:block;"></div>
-    <div style="position:absolute;top:239vh;left:70%;width:14%;opacity:0.15;transform:rotate(5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/img35.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:5vh;left:4%;width:13%;opacity:0.15;transform:rotate(-5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/purple-filledout-orchid.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:14vh;left:50%;width:14%;opacity:0.15;transform:rotate(3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/neon-transparent-orchids.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:23vh;left:80%;width:12%;opacity:0.15;transform:rotate(6deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/orange-pinks-blues-ink-bloom.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:32vh;left:20%;width:13%;opacity:0.15;transform:rotate(-3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/light-pink-orchid-string.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:41vh;left:68%;width:15%;opacity:0.15;transform:rotate(4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/sparkly-stars-moons-suns.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:50vh;left:8%;width:12%;opacity:0.15;transform:rotate(-6deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/pink-gossamer-fabric.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:59vh;left:42%;width:14%;opacity:0.15;transform:rotate(5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/iridescent-material-scrunch.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:68vh;left:76%;width:13%;opacity:0.15;transform:rotate(-3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/rainbow-moths.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:77vh;left:14%;width:15%;opacity:0.15;transform:rotate(4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/purpley-sea-creatures.png" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:86vh;left:60%;width:12%;opacity:0.15;transform:rotate(-5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/sparkly-silver-colourful-material.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:95vh;left:85%;width:13%;opacity:0.15;transform:rotate(3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/curly-whirly-orchid.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:104vh;left:28%;width:14%;opacity:0.15;transform:rotate(-4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/abstracted-shiny-closeup.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:113vh;left:55%;width:15%;opacity:0.15;transform:rotate(6deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/purple-orchid-closeup.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:122vh;left:6%;width:12%;opacity:0.15;transform:rotate(-3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/curled-bleeding-heart-strings.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:131vh;left:38%;width:14%;opacity:0.15;transform:rotate(5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/loads-of-jellyfish.png" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:140vh;left:72%;width:13%;opacity:0.15;transform:rotate(3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/blue-sparkly-fabric.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:149vh;left:18%;width:15%;opacity:0.15;transform:rotate(-6deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/tree-bark.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:158vh;left:46%;width:12%;opacity:0.15;transform:rotate(4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/abstract-colour-flower-overlays.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:167vh;left:82%;width:14%;opacity:0.15;transform:rotate(-3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/orange-purple-blue-ink-bloom.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:176vh;left:10%;width:13%;opacity:0.15;transform:rotate(5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/pink-poofy-orhicd-string.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:185vh;left:52%;width:15%;opacity:0.15;transform:rotate(-4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/neon-colour-shifted-flowers.png" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:194vh;left:78%;width:12%;opacity:0.15;transform:rotate(6deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/deep-dark-purple-orchid.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:203vh;left:24%;width:14%;opacity:0.15;transform:rotate(3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/green-white-star-flower.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:212vh;left:64%;width:13%;opacity:0.15;transform:rotate(-5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/colourful-neon-cell-ink-blooming.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:221vh;left:3%;width:15%;opacity:0.15;transform:rotate(4deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/long-fish-strip.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:230vh;left:35%;width:12%;opacity:0.15;transform:rotate(-3deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/purple-glass-orchid.jpg" alt="" style="width:100%;display:block;"></div>
+    <div style="position:absolute;top:239vh;left:70%;width:14%;opacity:0.15;transform:rotate(5deg);pointer-events:none;border-radius:14px;overflow:hidden;"><img src="images/chrysanthemum-varieties.jpg" alt="" style="width:100%;display:block;"></div>
     </div>
 
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
@@ -89,7 +288,7 @@
 
     <!-- Logo sits in its own bar, separate from nav -->
     <nav id="header-nav" class="navbar navbar-expand-lg py-4" data-bs-theme="dark">
-        <a id="site-logo" href="index.html"><img src="images/logo.png" alt="HAVDW"></a>
+        <a id="site-logo" href="index.html"><img src="images/logo.gif" alt="HAVDW"></a>
         <div class="container-fluid padding-side">
             <button class="navbar-toggler shadow-none ms-auto" type="button" data-bs-toggle="offcanvas"
                 data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
@@ -133,19 +332,19 @@
             <!-- Header -->
             <div class="row mb-5 align-items-end">
                 <div class="col-lg-8">
-                    <p class="letter-space text-primary fw-semibold fs-5" data-aos="fade-up" data-aos-duration="800">
+                    <p class="letter-space text-primary fw-semibold fs-3" data-aos="fade-up" data-aos-duration="800">
                         Curriculum Vitae
                     </p>
                     <h1 class="display-4 fw-medium my-3" data-aos="fade-up" data-aos-duration="1000">
                         Hazel Aileen van der Walle
                     </h1>
-                    <p class="text-secondary" data-aos="fade-up" data-aos-duration="1200">
-                        PhD Researcher · Music &amp; Imagination · Durham University<br>
+                    <p class="text-secondary" data-aos="fade-up" data-aos-duration="1200" style="letter-spacing: 0.09em;">
+                        Researcher · Music &amp; Imagination · Arts, Humanities, &amp; Social Sciences<br>
                         <a href="mailto:hazel.a.van-der-walle@durham.ac.uk"
                             class="text-primary">hazel.a.van-der-walle@durham.ac.uk</a>
                         &ensp;·&ensp;
-                        <a href="https://dur.ac.uk/staff/hazel-a-van-der-walle/" target="_blank"
-                            class="text-primary">Durham staff page</a>
+                        <a href="https://github.com/HazelvdW" target="_blank"
+                            class="text-primary">GitHub/HazelvdW</a>
                         &ensp;·&ensp;
                         <a href="https://orcid.org/0009-0003-1029-9683" target="_blank"
                             class="text-primary">ORCID</a>
@@ -168,15 +367,15 @@
 
                     <!-- Education -->
                     <div class="mb-5" data-aos="fade-up" data-aos-duration="900">
-                        <h2 class="fs-5 fw-semibold text-primary mb-4 letter-space">Education</h2>
+                        <h2 class="fs-4 fw-semibold text-primary mb-4 letter-space">Education</h2>
 
                         <div class="mb-4 pb-4" style="border-bottom: 1px solid rgba(255,255,255,0.08)">
                             <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-1">
-                                <h3 class="fs-6 fw-semibold mb-0">PhD in Music</h3>
-                                <span class="text-secondary small">2024 – present</span>
+                                <h3 class="fs-5 fw-semibold mb-0">PhD in Music</h3>
+                                <span class="text-secondary small" style="letter-spacing: 0.09em;">2024 – 2026</span>
                             </div>
-                            <p class="text-primary small mb-1">Durham University</p>
-                            <p class="small text-secondary">
+                            <p class="text-primary small mb-1" style="letter-spacing: 0.09em;">Durham University</p>
+                            <p class="small text-secondary" style="letter-spacing: 0.09em;">
                                 Thesis: <em>Music &amp; Imagination: An Empirical Mixed-Method Venture
                                 into Music-Influenced Mental Content.</em>
                             </p>
@@ -184,11 +383,11 @@
 
                         <div class="mb-4 pb-4" style="border-bottom: 1px solid rgba(255,255,255,0.08)">
                             <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-1">
-                                <h3 class="fs-6 fw-semibold mb-0">M.Sc. in Music, Mind &amp; Brain</h3>
-                                <span class="text-secondary small">2022 – 2023</span>
+                                <h3 class="fs-5 fw-semibold mb-0">M.Sc. in Music, Mind &amp; Brain</h3>
+                                <span class="text-secondary small" style="letter-spacing: 0.09em;">2022 – 2023</span>
                             </div>
-                            <p class="text-primary small mb-1">Goldsmiths University of London</p>
-                            <p class="small text-secondary">
+                            <p class="text-primary small mb-1" style="letter-spacing: 0.09em;">Goldsmiths University of London</p>
+                            <p class="small text-secondary" style="letter-spacing: 0.09em;">
                                 Pass with Distinction · Project: <em>Investigating the experience of liveness in aesthetic judgements of
                                 recorded music.</em>
                             </p>
@@ -196,11 +395,11 @@
 
                         <div class="mb-4">
                             <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-1">
-                                <h3 class="fs-6 fw-semibold mb-0">B.A. (Hons) in Theology, Music &amp; Worship</h3>
-                                <span class="text-secondary small">2019 – 2022</span>
+                                <h3 class="fs-5 fw-semibold mb-0">B.A. (Hons) in Theology, Music &amp; Worship</h3>
+                                <span class="text-secondary small" style="letter-spacing: 0.09em;">2019 – 2022</span>
                             </div>
-                            <p class="text-primary small mb-1">London School of Theology</p>
-                            <p class="small text-secondary">
+                            <p class="text-primary small mb-1" style="letter-spacing: 0.09em;">London School of Theology</p>
+                            <p class="small text-secondary" style="letter-spacing: 0.09em;">
                                 Pass with Distinction · Dissertation: <em>Illuminating The Harmonious Unity of Reality: A Theological and
                                 Musical Perspective on the Experience of Synaesthesia.</em>
                             </p>
@@ -209,66 +408,66 @@
 
                     <!-- Publications -->
                     <div class="mb-5" data-aos="fade-up" data-aos-duration="900">
-                        <h2 class="fs-5 fw-semibold text-primary mb-4 letter-space">Publications</h2>
+                        <h2 class="fs-4 fw-semibold text-primary mb-4 letter-space">Publications</h2>
 
                         <div class="mb-4 pb-4" style="border-bottom: 1px solid rgba(255,255,255,0.08)">
-                            <p class="small mb-1">
-                                <b>van der Walle, H. A.</b>, Margulis, E. H., &amp; Jakubowski, K. (2026).
+                            <p class="small mb-1" style="letter-spacing: 0.09em;">
+                                van der Walle, H. A.<b>, Margulis, E. H., &amp; Jakubowski, K. (2026).
                                 Framed Listening: Can accompanying contextual cues shape Music-Influenced Mental Content?
-                                <span class="text-secondary fst-italic">PsyArXiv [Preprint]</span>
+                                <span class="text-secondary fst-italic">PsyArXiv [Preprint]</b></span>
                                 <a href="https://doi.org/10.31234/osf.io/zup69_v1" target="_blank"
                                     class="text-primary">doi →</a>
                             </p>
                         </div>
 
                         <div class="mb-4 pb-4" style="border-bottom: 1px solid rgba(255,255,255,0.08)">
-                            <p class="small mb-1">
-                                <b>van der Walle, H. A.</b>, Margulis, E. H., &amp; Jakubowski, K. (2026).
+                            <p class="small mb-1" style="letter-spacing: 0.09em;">
+                                van der Walle, H. A.<b>, Margulis, E. H., &amp; Jakubowski, K. (2026).
                                 Basslines, Bodies, and Beehive Haircuts: What do we think about when we listen to music?
-                                <span class="text-secondary fst-italic">Imagination, Cognition and Personality.</span>
+                                <span class="text-secondary fst-italic">Imagination, Cognition and Personality.</b></span>
                                 <a href="https://doi.org/10.1177/02762366261465337" target="_blank"
                                     class="text-primary">doi →</a>
                             </p>
                         </div>
 
                         <div class="mb-4 pb-4" style="border-bottom: 1px solid rgba(255,255,255,0.08)">
-                            <p class="small mb-1">
-                                Wolsink, L. N., Manduch, P., Licata, A. E., <b>van der Walle, H. A.</b>, Vornhagen, J. B.,
+                            <p class="small mb-1" style="letter-spacing: 0.09em;">
+                                <b>Wolsink, L. N., Manduch, P., Licata, A. E., </b>van der Walle, H. A.<b>, Vornhagen, J. B.,
                                 Sharma, H., Ngiam, W. X. Q., Muhoozi, M., Marmyleva, A., Jaquiery, M., Crüwell, S., &amp; Gellersen, H. (2026).
                                 Ten Simple Rules for Running a ReproducibiliTea Journal Club.
-                                <span class="text-secondary fst-italic">MetaArXiv [Preprint]</span>
+                                <span class="text-secondary fst-italic">MetaArXiv [Preprint]</b></span>
                                 <a href="https://doi.org/10.31222/osf.io/swg38_v1" target="_blank"
                                     class="text-primary">doi →</a>
                             </p>
                         </div>
 
                         <div class="mb-4 pb-4" style="border-bottom: 1px solid rgba(255,255,255,0.08)">
-                            <p class="small mb-1">
-                                <b>van der Walle, H. A.</b>, Wu, W., Margulis, E. H., &amp; Jakubowski, K. (2025).
+                            <p class="small mb-1" style="letter-spacing: 0.09em;">
+                                van der Walle, H. A.<b>, Wu, W., Margulis, E. H., &amp; Jakubowski, K. (2025).
                                 Thoughtscapes in music: An examination of thought types occurring during music
                                 listening across 17 genres.
-                                <span class="text-secondary fst-italic">Psychology of Music.</span>
+                                <span class="text-secondary fst-italic">Psychology of Music.</b></span>
                                 <a href="https://doi.org/10.1177/03057356251346654" target="_blank"
                                     class="text-primary">doi →</a>
                             </p>
                         </div>
 
                         <div class="mb-4 pb-4" style="border-bottom: 1px solid rgba(255,255,255,0.08)">
-                            <p class="small mb-1">
-                                <b>van der Walle, H. A.</b>, Wu, W., Margulis, E. H., &amp; Jakubowski, K. (2025).
+                            <p class="small mb-1" style="letter-spacing: 0.09em;">
+                                van der Walle, H. A.<b>, Wu, W., Margulis, E. H., &amp; Jakubowski, K. (2025).
                                 MUSIFEAST-17: MUsic Stimuli for Imagination, Familiarity, Emotion, and Aesthetic
                                 STudies across 17 genres.
-                                <span class="text-secondary fst-italic">Behavior Research Methods, 57(7), 1–26.</span>
+                                <span class="text-secondary fst-italic">Behavior Research Methods, 57(7), 1–26.</b></span>
                                 <a href="https://doi.org/10.3758/s13428-025-02724-0" target="_blank"
                                     class="text-primary">doi →</a>
                             </p>
                         </div>
 
                         <div class="mb-4">
-                            <p class="small mb-1">
-                                Rai, L., <b>van der Walle, H. A.</b>, Painting, J., &amp; Orgs, G. (2024).
+                            <p class="small mb-1" style="letter-spacing: 0.09em;">
+                                <b>Rai, L., </b>van der Walle, H. A.<b>, Painting, J., &amp; Orgs, G. (2024).
                                 Experiencing liveness from recorded music.
-                                <span class="text-secondary fst-italic">[Preprint]</span>
+                                <span class="text-secondary fst-italic">[Preprint]</b></span>
                                 <a href="https://doi.org/10.31234/osf.io/ef3ry" target="_blank"
                                     class="text-primary">doi →</a>
                             </p>
@@ -277,34 +476,34 @@
 
                     <!-- Conferences -->
                     <div class="mb-5" data-aos="fade-up" data-aos-duration="900">
-                        <h2 class="fs-5 fw-semibold text-primary mb-4 letter-space">Conferences &amp; Presentations</h2>
+                        <h2 class="fs-4 fw-semibold text-primary mb-4 letter-space">Conferences &amp; Presentations</h2>
 
                         <p class="small fw-semibold mb-3 text-secondary letter-space"
-                            style="font-size:0.7rem; text-transform:uppercase">Select Papers Presented</p>
+                            style="font-size:1rem; text-transform:uppercase">Select Papers Presented</p>
 
                         <div class="mb-3 pb-3" style="border-bottom: 1px solid rgba(255,255,255,0.06)">
-                            <p class="small mb-0">
+                            <p class="small mb-0" style="letter-spacing: 0.09em;">
                                 <span class="text-secondary">2026, Apr.</span> &nbsp;
                                 Basslines, Bodies, &amp; Beehive Haircuts [Paper].
                                 <span class="text-secondary">SEMPRE, Cambridge, UK.</span>
                             </p>
                         </div>
                         <div class="mb-3 pb-3" style="border-bottom: 1px solid rgba(255,255,255,0.06)">
-                            <p class="small mb-0">
+                            <p class="small mb-0" style="letter-spacing: 0.09em;">
                                 <span class="text-secondary">2025, Jul.</span> &nbsp;
                                 MUSIFEAST-17 [Poster].
                                 <span class="text-secondary">ICMPC18, São Paulo, Brasil.</span>
                             </p>
                         </div>
                         <div class="mb-3 pb-3" style="border-bottom: 1px solid rgba(255,255,255,0.06)">
-                            <p class="small mb-0">
+                            <p class="small mb-0" style="letter-spacing: 0.09em;">
                                 <span class="text-secondary">2025, Jun.</span> &nbsp;
                                 Thoughtscapes in music [Paper].
                                 <span class="text-secondary">SysMus25, Oslo, Norway.</span>
                             </p>
                         </div>
                         <div class="mb-4 pb-3" style="border-bottom: 1px solid rgba(255,255,255,0.06)">
-                            <p class="small mb-0">
+                            <p class="small mb-0" style="letter-spacing: 0.09em;">
                                 <span class="text-secondary">2024, Jul.</span> &nbsp;
                                 Experiencing liveness from recorded music [Poster].
                                 <span class="text-secondary">ESCOM12, York, UK.</span>
@@ -312,24 +511,24 @@
                         </div>
 
                         <p class="small fw-semibold mb-3 text-secondary letter-space"
-                            style="font-size:0.7rem; text-transform:uppercase">Invited Talks</p>
+                            style="font-size:1rem; text-transform:uppercase">Invited Talks</p>
 
                         <div class="mb-3 pb-3" style="border-bottom: 1px solid rgba(255,255,255,0.06)">
-                            <p class="small mb-0">
+                            <p class="small mb-0" style="letter-spacing: 0.09em;">
                                 <span class="text-secondary">2026, Sep.</span> &nbsp;
                                 ReproducibiliTea: Open Research community building from grassroots to global growth [Session].
                                 <span class="text-secondary">OpenFest, University of Sheffield, UK.</span>
                             </p>
                         </div>
                         <div class="mb-3 pb-3" style="border-bottom: 1px solid rgba(255,255,255,0.06)">
-                            <p class="small mb-0">
+                            <p class="small mb-0" style="letter-spacing: 0.09em;">
                                 <span class="text-secondary">2026, Jul.</span> &nbsp;
                                 Open Research across the Arts, Humanities, and Social Sciences [Workshop].
                                 <span class="text-secondary">SysMus26, Durham University, UK.</span>
                             </p>
                         </div>
                         <div class="mb-3">
-                            <p class="small mb-0">
+                            <p class="small mb-0" style="letter-spacing: 0.09em;">
                                 <span class="text-secondary">2025, Jun.</span> &nbsp;
                                 van der Walle, H. A., Kirts, C. — ReproducibiliTea: Discipline-specific resources and
                                 steering committee insights [Session].
@@ -340,14 +539,14 @@
 
                     <!-- Teaching -->
                     <div class="mb-5" data-aos="fade-up" data-aos-duration="900">
-                        <h2 class="fs-5 fw-semibold text-primary mb-4 letter-space">Teaching Experience</h2>
+                        <h2 class="fs-4 fw-semibold text-primary mb-4 letter-space">Teaching Experience</h2>
                         <div class="mb-4">
                             <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-1">
-                                <h3 class="fs-6 fw-semibold mb-0">Graduate Teaching Assistant, Grade 6</h3>
-                                <span class="text-secondary small">2025 – 2026</span>
+                                <h3 class="fs-4 fw-semibold mb-0">Graduate Teaching Assistant, Grade 6</h3>
+                                <span class="text-secondary small" style="letter-spacing: 0.09em;">2025 – 2026</span>
                             </div>
-                            <p class="text-primary small mb-1">Durham University — Music &amp; Science, Level 2 Undergraduate</p>
-                            <p class="small text-secondary">Plan, prepare, and deliver tutorials and lectures; guide students in practical demonstrations; assist in supervision of student projects.</p>
+                            <p class="text-primary small mb-1" style="letter-spacing: 0.09em;">Durham University — Music &amp; Science, Level 2 Undergraduate</p>
+                            <p class="small text-secondary" style="letter-spacing: 0.09em;">Plan, prepare, and deliver tutorials and lectures; guide students in practical demonstrations; assist in supervision of student projects.</p>
                         </div>
                     </div>
 
@@ -359,10 +558,10 @@
                     <!-- Skills -->
                     <div class="mb-5 p-4 rounded" style="background:rgba(255,255,255,0.03)"
                         data-aos="fade-up" data-aos-duration="900">
-                        <h2 class="fs-5 fw-semibold text-primary mb-4 letter-space">Methods &amp; Skills</h2>
+                        <h2 class="fs-4 fw-semibold text-primary mb-4 letter-space">Methods &amp; Skills</h2>
 
                         <div class="mb-4 pb-3" style="border-bottom: 1px solid rgba(255,255,255,0.07)">
-                            <p class="small fw-semibold mb-2">Statistics &amp; Experimental Design</p>
+                            <p class="small fw-semibold mb-2" style="letter-spacing: 0.09em;">Statistics &amp; Experimental Design</p>
                             <div class="d-flex flex-wrap gap-2">
                                 <span class="badge" style="background:rgba(255,255,255,0.1)">R</span>
                                 <span class="badge" style="background:rgba(255,255,255,0.1)">HTML / CSS</span>
@@ -378,10 +577,10 @@
                         </div>
 
                         <div>
-                            <p class="small fw-semibold mb-2">Methods &amp; Techniques</p>
+                            <p class="small fw-semibold mb-2" style="letter-spacing: 0.09em;">Methods &amp; Techniques</p>
                             <div class="d-flex flex-wrap gap-2">
-                                <span class="badge" style="background:rgba(255,255,255,0.1)">Thematic analysis</span>
                                 <span class="badge" style="background:rgba(255,255,255,0.1)">Qualitative coding</span>
+                                <span class="badge" style="background:rgba(255,255,255,0.1)">Thematic analysis</span>
                                 <span class="badge" style="background:rgba(255,255,255,0.1)">Multi-coder reliability</span>
                                 <span class="badge" style="background:rgba(255,255,255,0.1)">Co-occurrence networks</span>
                                 <span class="badge" style="background:rgba(255,255,255,0.1)">Content analysis</span>
@@ -396,77 +595,77 @@
 
                     <!-- Honours & Awards -->
                     <div class="mb-5" data-aos="fade-up" data-aos-duration="900">
-                        <h2 class="fs-5 fw-semibold text-primary mb-4 letter-space">Honours &amp; Awards</h2>
+                        <h2 class="fs-4 fw-semibold text-primary mb-4 letter-space">Honours &amp; Awards</h2>
 
                         <div class="mb-3 pb-3" style="border-bottom: 1px solid rgba(255,255,255,0.08)">
                             <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
-                                <p class="small fw-semibold mb-0">SEMPRE Conference Award</p>
-                                <span class="text-secondary small">2026</span>
+                                <p class="small fw-semibold mb-0" style="letter-spacing: 0.09em;">SEMPRE Conference Award</p>
+                                <span class="text-secondary small" style="letter-spacing: 0.09em;">2026</span>
                             </div>
-                            <p class="small text-secondary mb-0">£245 · University of Cambridge</p>
+                            <p class="small text-secondary mb-0" style="letter-spacing: 0.09em;">£245 · University of Cambridge</p>
                         </div>
                         <div class="mb-3 pb-3" style="border-bottom: 1px solid rgba(255,255,255,0.08)">
                             <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
-                                <p class="small fw-semibold mb-0">John Simpson Greenwell Memorial Fund</p>
-                                <span class="text-secondary small">2025</span>
+                                <p class="small fw-semibold mb-0" style="letter-spacing: 0.09em;">John Simpson Greenwell Memorial Fund</p>
+                                <span class="text-secondary small" style="letter-spacing: 0.09em;">2025</span>
                             </div>
-                            <p class="small text-secondary mb-0">£2,000 · Point North</p>
+                            <p class="small text-secondary mb-0" style="letter-spacing: 0.09em;">£2,000 · Point North</p>
                         </div>
                         <div class="mb-3 pb-3" style="border-bottom: 1px solid rgba(255,255,255,0.08)">
                             <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
-                                <p class="small fw-semibold mb-0">Academic Interest Fund</p>
-                                <span class="text-secondary small">2025</span>
+                                <p class="small fw-semibold mb-0" style="letter-spacing: 0.09em;">Academic Interest Fund</p>
+                                <span class="text-secondary small" style="letter-spacing: 0.09em;">2025</span>
                             </div>
-                            <p class="small text-secondary mb-0">£400 · Durham University Student Union</p>
+                            <p class="small text-secondary mb-0" style="letter-spacing: 0.09em;">£400 · Durham University Student Union</p>
                         </div>
                         <div class="mb-3 pb-3" style="border-bottom: 1px solid rgba(255,255,255,0.08)">
                             <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
-                                <p class="small fw-semibold mb-0">Postgraduate Research Activity &amp; Professional Development Fund</p>
-                                <span class="text-secondary small">2025</span>
+                                <p class="small fw-semibold mb-0" style="letter-spacing: 0.09em;">Postgraduate Research Activity &amp; Professional Development Fund</p>
+                                <span class="text-secondary small" style="letter-spacing: 0.09em;">2025</span>
                             </div>
-                            <p class="small text-secondary mb-0">£200 · Durham University</p>
+                            <p class="small text-secondary mb-0" style="letter-spacing: 0.09em;">£200 · Durham University</p>
                         </div>
                         <div class="mb-3">
                             <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
-                                <p class="small fw-semibold mb-0">SEMPRE Conference Award</p>
-                                <span class="text-secondary small">2024</span>
+                                <p class="small fw-semibold mb-0" style="letter-spacing: 0.09em;">SEMPRE Conference Award</p>
+                                <span class="text-secondary small" style="letter-spacing: 0.09em;">2024</span>
                             </div>
-                            <p class="small text-secondary mb-0">£400 · York University</p>
+                            <p class="small text-secondary mb-0" style="letter-spacing: 0.09em;">£400 · York University</p>
                         </div>
                     </div>
 
                     <!-- Service -->
                     <div class="mb-5" data-aos="fade-up" data-aos-duration="900">
-                        <h2 class="fs-5 fw-semibold text-primary mb-4 letter-space">Service</h2>
+                        <h2 class="fs-4 fw-semibold text-primary mb-4 letter-space">Service</h2>
 
                         <p class="small fw-semibold mb-2 text-secondary letter-space"
-                            style="font-size:0.7rem; text-transform:uppercase">Professional</p>
+                            style="font-size:1rem; text-transform:uppercase">Professional</p>
                         <ul class="list-unstyled small text-secondary mb-4">
-                            <li class="mb-2">· Conference Organiser &amp; Host, SysMus26, Durham University <span class="text-secondary">(2025–2026)</span></li>
-                            <li class="mb-2">· Advisory Board Member, ReproducibiliTea <span class="text-secondary">(2025–present)</span></li>
-                            <li class="mb-2">· Journal Reviewer, <em>Music &amp; Science</em>, SEMPRE / Sage <span class="text-secondary">(2026, Apr.)</span></li>
-                            <li class="mb-2">· Journal Reviewer, <em>Durham Undergraduate Research in Music &amp; Science (DURMS)</em> <span class="text-secondary">(2024–2026)</span></li>
-                            <li class="mb-2">· Steering Committee Member, ReproducibiliTea <span class="text-secondary">(2024–2025)</span></li>
-                            <li class="mb-2">· Abstract Reviewer, SEMPRE, RNCM <span class="text-secondary">(2025, Mar.)</span></li>
+                            <li class="mb-2" style="letter-spacing: 0.09em;">· Conference Organiser &amp; Host, SysMus26, Durham University <span class="text-secondary">(2025–2026)</span></li>
+                            <li class="mb-2" style="letter-spacing: 0.09em;">· Advisory Board Member, ReproducibiliTea <span class="text-secondary">(2025–present)</span></li>
+                            <li class="mb-2" style="letter-spacing: 0.09em;">· Journal Reviewer, <em>Music &amp; Science</em>, SEMPRE / Sage <span class="text-secondary">(2026, Apr.)</span></li>
+                            <li class="mb-2" style="letter-spacing: 0.09em;">· Journal Reviewer, <em>Durham Undergraduate Research in Music &amp; Science (DURMS)</em> <span class="text-secondary">(2024–2026)</span></li>
+                            <li class="mb-2" style="letter-spacing: 0.09em;">· Steering Committee Member, ReproducibiliTea <span class="text-secondary">(2024–2025)</span></li>
+                            <li class="mb-2" style="letter-spacing: 0.09em;">· Abstract Reviewer, SEMPRE, RNCM <span class="text-secondary">(2025, Mar.)</span></li>
                         </ul>
 
                         <p class="small fw-semibold mb-2 text-secondary letter-space"
-                            style="font-size:0.7rem; text-transform:uppercase">Department / University</p>
+                            style="font-size:1rem; text-transform:uppercase">Department / University</p>
                         <ul class="list-unstyled small text-secondary">
-                            <li class="mb-2">· Music Department PhD Student Representative, Durham University <span class="text-secondary">(2024–2026)</span></li>
-                            <li class="mb-2">· Music Psychology Graduate Student Representative, Goldsmiths <span class="text-secondary">(2022–2023)</span></li>
-                            <li class="mb-2">· Music Department Student Representative, London School of Theology <span class="text-secondary">(2019–2022)</span></li>
+                            <li class="mb-2" style="letter-spacing: 0.09em;">· Music Department PhD Student Representative, Durham University <span class="text-secondary">(2024–2026)</span></li>
+                            <li class="mb-2" style="letter-spacing: 0.09em;">· Music Psychology Graduate Student Representative, Goldsmiths <span class="text-secondary">(2022–2023)</span></li>
+                            <li class="mb-2" style="letter-spacing: 0.09em;">· Music Department Student Representative, London School of Theology <span class="text-secondary">(2019–2022)</span></li>
                         </ul>
                     </div>
 
                     <!-- Professional Associations -->
                     <div class="mb-5" data-aos="fade-up" data-aos-duration="900">
-                        <h2 class="fs-5 fw-semibold text-primary mb-4 letter-space">Professional Associations</h2>
+                        <h2 class="fs-4 fw-semibold text-primary mb-4 letter-space">Professional Associations</h2>
                         <ul class="list-unstyled small text-secondary">
-                            <li class="mb-2">· ReproducibiliTea — Global Open Science initiative <span class="text-secondary">(2024–present)</span></li>
-                            <li class="mb-2">· European Society for the Cognitive Sciences of Music (ESCOM) <span class="text-secondary">(2024–present)</span></li>
-                            <li class="mb-2">· Society for Education, Music and Psychology Research (SEMPRE) <span class="text-secondary">(2024–present)</span></li>
-                            <li class="mb-2">· Centre for Research into Inner Experience, Durham University <span class="text-secondary">(2024–2026)</span></li>
+                            <li class="mb-2" style="letter-spacing: 0.09em;">· ReproducibiliTea — Global Open Science initiative <span class="text-secondary">(2024–present)</span></li>
+                            <li class="mb-2" style="letter-spacing: 0.09em;">· European Society for the Cognitive Sciences of Music (ESCOM) <span class="text-secondary">(2024–present)</span></li>
+                            <li class="mb-2" style="letter-spacing: 0.09em;">· Society for Education, Music and Psychology Research (SEMPRE) <span class="text-secondary">(2024–present)</span></li>
+                            <li class="mb-2" style="letter-spacing: 0.09em;">· Centre for Research into Inner Experience, Durham University <span class="text-secondary">(2024–2026)</span></li>
                         </ul>
                     </div>
 
