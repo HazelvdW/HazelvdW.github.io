@@ -1,26 +1,9 @@
-/*
-Theme Name: LaurenTsai
-Theme URL: 
-Author: TemplatesJungle
-Author URL: https://templatesjungle.com/
-Description: LaurenTsai is a Free Bootstrap Website Template for Portfolio Template by TemplatesJungle.
-Version: 1.0
-*/
-
-/*--------------------------------------------------------------
-This is main CSS file that contains custom style rules used in this template
---------------------------------------------------------------*/
-
-/*------------------------------------*\
-    Table of contents
-\*------------------------------------*/
-
 
 /** Base Styles
 --------------------------------------------------------------*/
 :root {
   --primary-color: #66FD0F;
-  --secondary-color: ;
+  --secondary-color: #b44fff;
   --dark-color: #2D2D2D;
   --white-color: #FFFFFF;
   --grey-color: #777777;
@@ -41,7 +24,7 @@ This is main CSS file that contains custom style rules used in this template
 /* Fonts */
 :root {
   --heading-font: "VT323", monospace;
-  --body-font: "VT323", monospace;
+  --body-font: "Handjet", monospace;
 }
 
 
