@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>𓏲๋࣭࣪˖🫧⋆｡° Exploration — Hazel A. vdW</title>
+    <title>Curiosity blog 30.09.26 — Hazel A. vdW</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -28,6 +28,26 @@
         section.padding-medium { padding-top: 0.5rem !important; }
         .badge { color: #1a0033 !important; }
         .badge[style*="rgba(255,255,255,0.08)"] { color: rgba(255,255,255,0.85) !important; }
+
+        .text {
+         position: relative;
+        }
+        .text:link { text-decoration: none; }
+        .text::before {
+          content: " ";
+          display: block;
+          position: absolute;
+          inset: 0 0 0 0;
+          background: purple;
+          z-index: -1;
+          transform: scaleX(0);
+          transform-origin: bottom right;
+          transition: transform .5s ease;
+        }
+        .text:hover::before {
+           transform: scaleX(1);
+           transform-origin: bottom left;
+        }
     </style>
 </head>
 
@@ -315,7 +335,7 @@ function createDiv(height, width) {
                             href="cv.html">CV</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active pe-lg-5" style="letter-spacing: 0.09em;" aria-current="page" 
+                            <a class="nav-link  pe-lg-5" style="letter-spacing: 0.09em;" 
                                 href="exploration.html">Exploration</a>
                         </li>
                         <li class="nav-item">
@@ -332,271 +352,89 @@ function createDiv(height, width) {
     <section class="padding-medium">
         <div class="container text-white">
 
-            <!-- Page header: img/gif sat beside  intro text -->
-            <div class="row mb-4 align-items-center">
-                <div class="col-lg-7">
-                    <p class="letter-space text-primary fw-semibold fs-1" data-aos="fade-up" data-aos-duration="800">
-                        Blogs · Vlogs · Art
-                    </p>
-                    <p data-aos="fade-up" data-aos-duration="1200" style="letter-spacing: 0.01em; line-height: 1.6;">
-                        My creative explorations and curious experiments 
-                        that won't be found in a journal article — art, writing, vlogs, and
-                        whatever else I end up making. <br>
-                        Under construction <em>(aren't we all?)</em> — here's a taste :)
-                    </p>
-                </div>
-                <div class="col-lg-5 text-center">
-                    <img src="images/gifz/dvd-bounce.gif" alt="DVD bounce" data-aos="fade-up" data-aos-duration="1000"
-                        style="width: min(60%, 220px); display:block; margin: 0 auto;">
-                </div>
-            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-9">
 
-            <!-- images just below intro text -->
-            <div class="d-flex flex-wrap justify-content-center align-items-center" style="gap: 0.75rem;" data-aos="fade-up" data-aos-duration="1300">
-               <img src="images/imagez/cool-is-a-prison.JPG" alt="Being cool is a prison" class="img-fluid rounded"
-                   style="border: 2px solid rgba(255,255,255,0.15); max-width: 240px;">
-               <img src="images/gifz/popup-jellies.gif" alt="Jellies!" class="img-fluid rounded"
-                   style="border: 2px solid rgba(255,255,255,0.15); max-width: 290px;">
-               <img src="images/imagez/creation-over-perfection.JPG" alt="Prioritizing creation over perfection" class="img-fluid rounded"
-                   style="border: 2px solid rgba(255,255,255,0.15); max-width: 290px;">
-            </div>
+                    <!-- Back link -->
+                    <a href="exploration.html" class="text-secondary small text d-inline-block mb-4" data-aos="fade-up" data-aos-duration="600">
+                        &larr; back to <em>Exploration</em>
+                    </a>
 
-            <!-- Browse: type (green) + category (purple) filters, search, date sort -->
-            <div class="row mt-5 mb-3" data-aos="fade-up" data-aos-duration="900">
-                <div class="col-12 mb-3">
-                    <h2 class="fs-3 fw-semibold text-primary letter-space">Browse</h2>
-                </div>
-                <div class="col-12">
-
-                    <div class="d-flex flex-wrap gap-2 mb-2" id="explore-type-filters">
-                        <button class="filter-button active px-3 py-1" data-filter="all">All</button>
-                        <button class="filter-button px-3 py-1" data-filter="blog">Blog</button>
-                        <button class="filter-button px-3 py-1" data-filter="vlog">Vlog</button>
-                        <button class="filter-button px-3 py-1" data-filter="art">Art</button>
+                    <!-- Post header -->
+                    <div class="mb-4" data-aos="fade-up" data-aos-duration="800">
+                        <span class="badge bg-secondary mb-3">Blog</span>
+                        <h1 class="display-5 fw-medium my-2">Curiosity & vulnerability</h1>
+                        <p class="text-secondary small mb-3" style="letter-spacing: 0.03em;">
+                            September 30, 2026 &middot; updates, reflections, advice, digital shiny cards
+                        </p>
                     </div>
 
-                    <div class="d-flex flex-wrap gap-2 mb-3" id="explore-tag-filters">
-                        <button class="filter-button-purple active px-3 py-1" data-tag="all">All topics</button>
-                        <button class="filter-button-purple px-3 py-1" data-tag="academia">Academia</button>
-                        <button class="filter-button-purple px-3 py-1" data-tag="poetry">Poetry</button>
-                        <button class="filter-button-purple px-3 py-1" data-tag="advice">Advice</button>
-                        <button class="filter-button-purple px-3 py-1" data-tag="reflections">Reflections</button>
-                        <button class="filter-button-purple px-3 py-1" data-tag="updates">Updates</button>
-                        <button class="filter-button-purple px-3 py-1" data-tag="art-experiments">Art experiments</button>
-                        <button class="filter-button-purple px-3 py-1" data-tag="digital-shiny-cards">Digital Shiny Cards</button>
+                    <div data-aos="fade-up" data-aos-duration="1000" style="letter-spacing: 0.01em; line-height: 1.65;">
+
+                        <p>Happy September 30th 2026! And happy first blog-post-in-a-while to me! —> here I am ticking off doing my <em>doing-something-a-little-embarrassing-and-vulnerable</em> for today. 
+                            <br>And what better topic to start writing about!
+</p>
+
+                        <p>Having submitted my PhD a full 30 days ago, I have been enjoying trying out some new things I promised myself I would do once I had more free time. A lot of these things have been creating in some way. 
+</p>
+
+                        <p>Creating is one part of life that makes me feel my most fulfilled and most human. Being inspired by the world around me, colours, sounds, other people whether stranger or friend, nature, writing, games, sensations (etc. etc., I could go on). Loving an idea or an experience so much that I am compelled and overcome by an urge to give shape to my curiosities or interest in whatever form of expression could best channel my overflowing passions.
+</p>
+
+                        <p>Most recently, this has taken the form of this website! 
+                            <br>Having seen the second-coming of the indie web, or “neo-cities”, there has been such a gorgeous growth of people online sharing their code and different fun effects (scripted.neocities.org, where would I be without you and my new purple bubble cursor). I have enjoyed making silly gifs and curating the photos I want as my background. Even asking questions like “what font best suits me and the feeling I am trying to convey here?” has been such fun.
+                            <br>Other times, this expression has taken the form of oil pastels, smearing and scraping and smudging my ideas into my drawing pad, trying to get as much colour and life out of each oil pastel as possible. 
+                            <br>Right now, that expression is writing this!
+                        </p>
+
+                        <p>I have been really inspired by fish and water recently, both as an object of study but also more abstractly as a how I am wanting to approach life at the moment. 
+</p>
+
+                        <p>Hearing the sound of running water, or seeing that magical way light reflects off and through water onto other objects around it, I remember to take a breath and be fluid like water, letting the currents take me wherever they send me, yet move with immense strength and gentleness. 
+</p>
+
+                        <p>And my fish poem I wrote while I was finishing off my PhD and finding joy in research after a painful few months. Learning to not hold so tightly onto things means I have open hands ready to catch whatever comes my direction. And I so badly desire to share in these joys of ideas, findings, figuring things out together, and being able to collectively jump into exciting opportunities that come our way.
+</p>
+
+                        <p>Life is so much better when experienced together and shared with others. That is one of the main reasons I wanted to make this website and start sharing wee nuggets of life and creation with others, whoever stumbles across it (<em>hello to you!</em>).
+</p>
+
+                        <p>How wonderful it is to be a curious and passionate person. 
+                            <br>I have come to realise these are the traits I value most in a person. I hope to be someone who inspires others to stretch their curiosities into somewhere they haven’t been yet. My big tip: new and scary things are way more fun and with others, and you can other propel each other farther than where you both could have imagined individually.
+</p>
+
+                        <p>I hope you do something a little vulnerable and embarrassing today. Or maybe this week, no pressure ;)
+                            <br>Do that thing that has been in the back of your mind but you are too scared you will fail (<em>you know what it is, that thing you just thought of</em>). 
+                            <br>Maybe reach out to the person who really inspires you or you just really want to connect with. Or start putting those whacky ideas down for a really cool idea you had but were too afraid that you didn’t have the skills or knowledge to yet (best way to learn is by trying!). 
+                        </p>
+
+                        <p>There will be no call to adventure; you must seek it out!
+</p>
+
+                        <p>And always be gentle with yourself. 
+                            <br>We’re all beginners in life, and we are all in a constant state of practice. How beautiful is that?
+                        </p>
+
+                        
                     </div>
 
-                    <div class="d-flex flex-wrap align-items-center gap-3 mb-4">
-                        <input type="text" id="explore-search" class="form-control"
-                            placeholder="Search by title..."
-                            style="max-width: 300px; background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.2);">
-                        <button id="explore-sort" class="filter-button px-3 py-1" data-order="desc" type="button">
-                            Newest first
-                        </button>
+                    <div class="d-flex flex-wrap justify-content-center align-items-center gap-4 my-4 position-relative" style="z-index: 1;">
+                      <img src="images/explr/curious-fumbling.jpeg" alt="" style="width:400px;" class="img-fluid rounded-3 shadow-sm">
+                      <img src="images/explr/curious-vulnerability.jpeg" alt="" style="width:400px;" class="img-fluid rounded-3 shadow-sm">
+                      <img src="images/explr/curious-scientific-method.jpeg" alt="" style="width:400px;" class="img-fluid rounded-3 shadow-sm">
+                      <img src="images/explr/curious-esoteric-wisdom.jpeg" alt="" style="width:400px;" class="img-fluid rounded-3 shadow-sm">
+                      <img src="images/explr/curious-soft-light.jpeg" alt="" style="width:400px;" class="img-fluid rounded-3 shadow-sm">
+                      <img src="images/explr/curious-playing-cool.jpeg" alt="" style="width:400px;" class="img-fluid rounded-3 shadow-sm">
+                      <img src="images/explr/curious-notes-app.jpeg" alt="" style="width:400px;" class="img-fluid rounded-3 shadow-sm">
+                      <img src="images/explr/curious-cringe.jpeg" alt="" style="width:400px;" class="img-fluid rounded-3 shadow-sm">
+
                     </div>
 
+                    <a href="exploration.html" class="text-secondary small text d-inline-block mt-4" data-aos="fade-up" data-aos-duration="600">
+                        &larr; back to <em>Exploration</em>
+                    </a>
                 </div>
             </div>
-
-            <div class="row g-4 mb-5" id="explore-grid" data-aos="fade-up" data-aos-duration="1000">
-
-                <!-- Blog: Curiostiy & Vulnerability -->
-                <div class="col-md-6 col-lg-4 explore-card" data-category="blog" data-tags="updates reflections advice digital-shiny-cards"
-                    data-date="2026-09-30" data-title="Curiosity & vulnerability">
-                    <a href="explr-blog-curiosity-vulnerability.html" class="text-decoration-none">
-                        <div class="border rounded overflow-hidden h-100 repo-card"
-                            style="border-color: rgba(255,255,255,0.12) !important;">
-                            <img src="images/backgroundz/colour-shifted-flower-stamen.jpg" alt=""
-                                style="width:100%; height:180px; object-fit:cover; display:block;">
-                            <div class="p-3">
-                                <span class="badge bg-secondary mb-2">Blog</span>
-                                <h3 class="fs-5 fw-semibold text-white mb-1">Curiosity & vulnerability</h3>
-                                <p class="small text-secondary mb-1" style="letter-spacing: 0.01em; line-height: 1.5;">
-                                    There will be no call to adventure; you must seek it out!
-                                </p>
-                                <p class="small text-secondary mb-0" style="opacity: 0.6;">30 Sep 2026</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Blog: ICMPC18 -->
-                <div class="col-md-6 col-lg-4 explore-card" data-category="blog" data-tags="academia advice reflections"
-                    data-date="2025-08-13" data-title="conferences huh whats the point music science conference icmpc">
-                    <a href="explr-blog-conferences-huh.html" class="text-decoration-none">
-                        <div class="border rounded overflow-hidden h-100 repo-card"
-                            style="border-color: rgba(255,255,255,0.12) !important;">
-                            <img src="images/explr/icmpc-tree-PJdL.jpeg" alt=""
-                                style="width:100%; height:180px; object-fit:cover; display:block;">
-                            <div class="p-3">
-                                <span class="badge bg-secondary mb-2">Blog</span>
-                                <h3 class="fs-5 fw-semibold text-white mb-1">Conferences, huh. What's the point?</h3>
-                                <p class="small text-secondary mb-1" style="letter-spacing: 0.01em; line-height: 1.5;">
-                                    Why attend conferences and how to make the most of them.
-                                </p>
-                                <p class="small text-secondary mb-0" style="opacity: 0.6;">13 Aug 2025</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Poem: instead. -->
-                <div class="col-md-6 col-lg-4 explore-card" data-category="art" data-tags="poetry reflections digital-shiny-cards"
-                    data-date="2025-08-31" data-title="instead poetry reflections">
-                    <a href="explr-art-instead.html" class="text-decoration-none">
-                        <div class="border rounded p-3 h-100 repo-card"
-                            style="border-color: rgba(255,255,255,0.12) !important;">
-                            <img src="images/explr/instead-i-hope-you-are-free.jpeg" alt=""
-                                style="width:100%; height:180px; object-fit:cover; display:block;">
-                            <div class="p-3">
-                                <span class="badge bg-secondary mb-2">Art</span>
-                                <h3 class="fs-5 fw-semibold text-white mb-1">instead.</h3>
-                                <p class="small text-secondary mb-1 fst-italic" style="letter-spacing: 0.01em; line-height: 1.5;">
-                                    &ldquo;&hellip;let awe spill from your eyes&hellip;&rdquo;
-                                </p>
-                                <p class="small text-secondary mb-0" style="opacity: 0.6;">31 Aug 2025</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Poem: London. -->
-                <div class="col-md-6 col-lg-4 explore-card" data-category="art" data-tags="poetry reflections travel"
-                    data-date="2025-06-03" data-title="london poetry travel">
-                    <a href="explr-art-london.html" class="text-decoration-none">
-                        <div class="border rounded p-3 h-100 repo-card"
-                            style="border-color: rgba(255,255,255,0.12) !important;">
-                            <img src="images/explr/2022-09-18-london.jpeg" alt=""
-                                style="width:100%; height:180px; object-fit:cover; display:block;">
-                            <div class="p-3">
-                                <span class="badge bg-secondary mb-2">Art</span>
-                                <h3 class="fs-5 fw-semibold text-white mb-1">London.</h3>
-                                <p class="small text-secondary mb-1 fst-italic" style="letter-spacing: 0.01em; line-height: 1.5;">
-                                    &ldquo;You are a tricky love. But a love nonetheless.&rdquo;
-                                </p>
-                                <p class="small text-secondary mb-0" style="opacity: 0.6;">3 Jun 2025</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Poem: & more retrospection (turning 23) -->
-                <div class="col-md-6 col-lg-4 explore-card" data-category="art" data-tags="poetry reflections art-experiments digital-shiny-cards"
-                    data-date="2023-11-04" data-title="more retrospection turning 23 poetry reflections">
-                    <a href="explr-art-turning-23.html" class="text-decoration-none">
-                        <div class="border rounded p-3 h-100 repo-card"
-                            style="border-color: rgba(255,255,255,0.12) !important;">
-                            <img src="images/explr/2023-08-25-pentlandhills.jpeg" alt=""
-                                style="width:100%; height:180px; object-fit:cover; display:block;">
-                            <div class="p-3">
-                                <span class="badge bg-secondary mb-2">Art</span>
-                                <h3 class="fs-5 fw-semibold text-white mb-1">&amp; more retrospection</h3>
-                                <p class="small text-secondary mb-1 fst-italic" style="letter-spacing: 0.01em; line-height: 1.5;">
-                                    &ldquo;we&rsquo;re all just travellers. all footprints eventually disappear.&rdquo;
-                                </p>
-                                <p class="small text-secondary mb-0" style="opacity: 0.6;">4 Nov 2023</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Poem: beautiful, ordinary life (turning 22) -->
-                <div class="col-md-6 col-lg-4 explore-card" data-category="art" data-tags="poetry reflections art-experiments digital-shiny-cards"
-                    data-date="2022-11-04" data-title="beautiful ordinary life turning 22 poetry reflections">
-                    <a href="explr-art-turning-22.html" class="text-decoration-none">
-                        <div class="border rounded p-3 h-100 repo-card"
-                            style="border-color: rgba(255,255,255,0.12) !important;">
-                            <img src="images/explr/2023-05-15-london.jpeg" alt=""
-                                style="width:100%; height:180px; object-fit:cover; display:block;">
-                            <div class="p-3">
-                                <span class="badge bg-secondary mb-2">Art</span>
-                                <h3 class="fs-5 fw-semibold text-white mb-1">beautiful, ordinary life</h3>
-                                <p class="small text-secondary mb-1 fst-italic" style="letter-spacing: 0.01em; line-height: 1.5;">
-                                    &ldquo;looking back at my beautiful, ordinary life.&rdquo;
-                                </p>
-                                <p class="small text-secondary mb-0" style="opacity: 0.6;">4 Nov 2022</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Placeholder example — remove or fill in as posts go up -->
-                <div class="col-md-6 col-lg-4 explore-card" data-category="vlog" data-tags="" data-date=""
-                    data-title="coming soon vlog">
-                    <div class="border rounded p-3 h-100 d-flex flex-column justify-content-center text-center"
-                        style="border-color: rgba(255,255,255,0.12) !important; border-style: dashed !important; min-height: 180px;">
-                        <span class="badge bg-secondary mb-2 mx-auto">Vlog</span>
-                        <h3 class="fs-5 fw-semibold text-white mb-1">Coming soon</h3>
-                        <p class="small text-secondary mb-0">First vlog goes here.</p>
-                    </div>
-                </div>
-
-            </div>
-
-            <script>
-            (function() {
-                var typeButtons = document.querySelectorAll('#explore-type-filters .filter-button');
-                var tagButtons = document.querySelectorAll('#explore-tag-filters .filter-button-purple');
-                var searchInput = document.getElementById('explore-search');
-                var sortButton = document.getElementById('explore-sort');
-                var grid = document.getElementById('explore-grid');
-                var cards = Array.prototype.slice.call(document.querySelectorAll('.explore-card'));
-
-                var activeType = 'all';
-                var activeTag = 'all';
-                var sortOrder = 'desc'; // desc = newest first
-
-                function applyFilters() {
-                    var query = searchInput.value.trim().toLowerCase();
-                    cards.forEach(function(card) {
-                        var cardTags = (card.dataset.tags || '').split(' ');
-                        var matchesType = activeType === 'all' || card.dataset.category === activeType;
-                        var matchesTag = activeTag === 'all' || cardTags.indexOf(activeTag) !== -1;
-                        var matchesSearch = !query || card.dataset.title.indexOf(query) !== -1;
-                        card.style.display = (matchesType && matchesTag && matchesSearch) ? '' : 'none';
-                    });
-                }
-
-                function applySort() {
-                    var dated = cards.filter(function(c) { return c.dataset.date; });
-                    var undated = cards.filter(function(c) { return !c.dataset.date; });
-                    dated.sort(function(a, b) {
-                        var da = a.dataset.date, db = b.dataset.date;
-                        return sortOrder === 'desc' ? (da < db ? 1 : -1) : (da > db ? 1 : -1);
-                    });
-                    dated.concat(undated).forEach(function(card) { grid.appendChild(card); });
-                }
-
-                typeButtons.forEach(function(btn) {
-                    btn.addEventListener('click', function() {
-                        typeButtons.forEach(function(b) { b.classList.remove('active'); });
-                        btn.classList.add('active');
-                        activeType = btn.dataset.filter;
-                        applyFilters();
-                    });
-                });
-
-                tagButtons.forEach(function(btn) {
-                    btn.addEventListener('click', function() {
-                        tagButtons.forEach(function(b) { b.classList.remove('active'); });
-                        btn.classList.add('active');
-                        activeTag = btn.dataset.tag;
-                        applyFilters();
-                    });
-                });
-
-                sortButton.addEventListener('click', function() {
-                    sortOrder = sortOrder === 'desc' ? 'asc' : 'desc';
-                    sortButton.textContent = sortOrder === 'desc' ? 'Newest first' : 'Oldest first';
-                    applySort();
-                });
-
-                searchInput.addEventListener('input', applyFilters);
-
-                applySort();
-                applyFilters();
-            })();
-            </script>
 
         </div>
     </section>
