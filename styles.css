@@ -482,3 +482,121 @@ button.filter-button-purple:hover {
 .btn-purple-outline:hover svg {
   color: #1a0033 !important;
 }
+
+/* =======================================
+RETRO WINDOW (Windows 95 / MS Paint style)
+======================================= */
+        .win95 {
+            --win-grey: #c0c0c0;
+            --win-navy: #000080;
+            --win-dark: #0a0a0a;
+            --win-shadow: #808080;
+            --win-light: #dfdfdf;
+            --win-white: #ffffff;
+
+            position: relative;
+            z-index: 1;                   /* sits above collage */
+            background: var(--win-grey);
+            color: #000;
+            padding: 3px;
+            /* raised 3D bevel */
+            box-shadow:
+                inset -1px -1px var(--win-dark),
+                inset  1px  1px var(--win-light),
+                inset -2px -2px var(--win-shadow),
+                inset  2px  2px var(--win-white);
+        }
+
+        /* blue title bar */
+        .win95-titlebar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            background: var(--win-navy);
+            color: #fff;
+            padding: 3px 3px 3px 6px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            user-select: none;
+        }
+        .win95-title {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            min-width: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .win95-controls { display: flex; gap: 2px; flex-shrink: 0; }
+        .win95-btn {
+            width: 22px; height: 20px;
+            display: grid; place-items: center;
+            background: var(--win-grey);
+            color: #000 !important;
+            font-weight: bold;
+            font-size: 13px;
+            line-height: 1;
+            text-decoration: none;
+            box-shadow:
+                inset -1px -1px var(--win-dark),
+                inset  1px  1px var(--win-white),
+                inset -2px -2px var(--win-shadow),
+                inset  2px  2px var(--win-light);
+        }
+        .win95-btn:active {
+            box-shadow:
+                inset  1px  1px var(--win-dark),
+                inset -1px -1px var(--win-white),
+                inset  2px  2px var(--win-shadow),
+                inset -2px -2px var(--win-light);
+        }
+        .win95-btn.close { margin-left: 2px; }
+
+        /* File / Edit / View menu row */
+        .win95-menubar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px 1rem;
+            padding: 3px 6px;
+            font-size: 0.9rem;
+            user-select: none;
+        }
+        .win95-menubar span { padding: 0 4px; cursor: default; }
+        .win95-menubar span:hover { background: var(--win-navy); color: #fff; }
+
+        /* white "canvas" with sunken grey border — text box */
+        .win95-canvas {
+            background: #fff;
+            color: #111;
+            margin: 2px;
+            padding: 1.75rem 2.25rem;
+            box-shadow:
+                inset -1px -1px var(--win-white),
+                inset  1px  1px var(--win-shadow),
+                inset -2px -2px var(--win-light),
+                inset  2px  2px var(--win-dark);
+        }
+        .win95-canvas .text-secondary { color: #555 !important; }
+        .win95-canvas a { color: #60f; }
+
+        /* bottom status bar */
+        .win95-statusbar {
+            display: flex;
+            gap: 3px;
+            margin-top: 3px;
+            font-size: 0.85rem;
+        }
+        .win95-statusbar > div {
+            padding: 2px 8px;
+            box-shadow: inset -1px -1px var(--win-white), inset 1px 1px var(--win-shadow);
+        }
+        .win95-statusbar > div:first-child { flex: 1; }
+
+        @media (max-width: 576px) {
+            .win95-canvas { padding: 1.25rem 1rem; }
+        }
+/* =======================================
+~ end win95 styling ~ :)
+======================================= */
