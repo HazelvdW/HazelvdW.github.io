@@ -603,12 +603,7 @@ RETRO WINDOW (Windows 95 / MS Paint style)
 
 /* radial glow effect for "Exploration" nav link */
 radial-glow {
-  color: #fff;
   background-color: transparent;
   background-image: radial-gradient(purple 30%, transparent 70%);
-}
-.nav-link radial-glow,
-.nav-link > radial-glow {
-  color: #fff !important;
 }
 /* --- */
